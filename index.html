@@ -1,101 +1,30 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>EPUB.js Viewer with TOC & Themes</title>
-  <script src="https://unpkg.com/epubjs/dist/epub.min.js"></script>
-  <style>
-    html, body { margin:0; height:100%; font-family:sans-serif; }
-    .app { display:flex; height:100vh; }
-    .sidebar { width:250px; border-right:1px solid #ccc; overflow:auto; padding:8px; }
-    .viewer-wrap { flex:1; display:flex; flex-direction:column; }
-    #controls { display:flex; gap:8px; padding:8px; border-bottom:1px solid #ccc; }
-    #controls button, #controls select { padding:6px 10px; }
-    #viewer { flex:1; }
-    ul { list-style:none; padding-left:0; }
-    ul li { margin:4px 0; }
-    ul li a { text-decoration:none; color:#0074d9; }
-  </style>
-</head>
-<body>
-  <div class="app">
-    <div class="sidebar">
-      <h3>Table of Contents</h3>
-      <ul id="toc">Loading...</ul>
-      <hr />
-      <h4>Settings</h4>
-      <label>Font size: <select id="fontSize">
-        <option value="100">Default</option>
-        <option value="120">+20%</option>
-        <option value="140">+40%</option>
-      </select></label><br/><br/>
-      <label>Theme: <select id="theme">
-        <option value="default">Default</option>
-        <option value="sepia">Sepia</option>
-        <option value="night">Night</option>
-      </select></label>
-    </div>
-    <div class="viewer-wrap">
-      <div id="controls">
-        <button id="prev">◀ Prev</button>
-        <button id="next">Next ▶</button>
-      </div>
-      <div id="viewer"></div>
-    </div>
-  </div>
 
-  <script>
-    const book = ePub("book.epub");
-    const rendition = book.renderTo("viewer", { width: "100%", height: "100%" });
-    rendition.display();
 
-    document.getElementById("prev").addEventListener("click", () => rendition.prev());
-    document.getElementById("next").addEventListener("click", () => rendition.next());
 
-    // Load TOC
-    const tocEl = document.getElementById("toc");
-    book.loaded.navigation.then(toc => {
-      tocEl.innerHTML = '';
-      toc.forEach(chapter => {
-        const li = document.createElement('li');
-        const a = document.createElement('a');
-        a.textContent = chapter.label;
-        a.href = chapter.href;
-        a.addEventListener('click', e => {
-          e.preventDefault();
-          rendition.display(chapter.href);
-        });
-        li.appendChild(a);
-        tocEl.appendChild(li);
-      });
-    });
+<html id="bibi">
 
-    // Font size
-    document.getElementById("fontSize").addEventListener("change", e => {
-      rendition.themes.fontSize(e.target.value + "%");
-    });
 
-    // Themes
-    function applyTheme(name) {
-      if (name === 'sepia') {
-        rendition.themes.register('sepia', { body: { background: '#f4ecd8', color:'#5b4636' } });
-        rendition.themes.select('sepia');
-      } else if (name === 'night') {
-        rendition.themes.register('night', { body: { background: '#0b0b0b', color:'#dcdcdc' } });
-        rendition.themes.select('night');
-      } else {
-        rendition.themes.register('default', { body: { background: '#fff', color:'#000' } });
-        rendition.themes.select('default');
-      }
-    }
-    document.getElementById("theme").addEventListener("change", e => applyTheme(e.target.value));
+	<head>
 
-    // Error handling
-    book.on("error", err => {
-      console.error("Error loading book:", err);
-      alert("Failed to load book.epub. Make sure you are serving files over HTTP, not file://");
-    });
-  </script>
-</body>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<title>Baz's lib.</title>
+		<link id="bibi-style" rel="stylesheet" href="bibi/resources/styles/bibi.css" />
+		<link id="bibi-dress" rel="stylesheet" href="bibi/wardrobe/everyday/bibi.dress.css" />
+		<script id="bibi-script" src="bibi/resources/scripts/bibi.js"></script>
+		<script id="bibi-preset" src="bibi/presets/default.js" data-bibi-bookshelf=""></script>
+
+	</head>
+
+
+	<body data-bibi-book="sirah.epub">
+
+		<div id="bibi-book-data" data-bibi-book-mimetype="application/epub+zip" hidden="hidden">
+		</div>
+
+	</body>
+
+
 </html>
