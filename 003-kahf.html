@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Lessons From Surah Al-Kahf</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="style.css">
+  <script src="header.js"></script>
+  <!-- JSZip + epub.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/epubjs/dist/epub.min.js"></script>
+
+</head>
+<body>
+  <header>
+    <header3-component></header3-component>
+    <button id="fontUp">A+</button>
+    <button id="fontDown">A-</button>
+    <span id="status"></span>
+  </header>
+
+<button id="prev">◀</button>
+<button id="next">▶</button>
+
+<div id="viewer">
+  <div id="loading">Loading book…</div>
+</div>
+
+<div id="controls">
+  <span id="pageInfo">---</span>
+  <input type="range" id="pageSlider" min="0" max="100" value="0">
+  <div>
+    <input type="number" id="pageInput" min="1" value="1" style="width:60px">
+    <button id="pageGo">Go</button>
+    <button id="reset">Reset</button>
+  </div>
+</div>
+
+  <script>
+    let book, rendition, locations;
+    let currentFontSize = parseInt(localStorage.getItem("fontSize")) || 100; // %
+    let lastLocation = localStorage.getItem("cfi") || null;
+
+    function loadBook(source) {
+      document.getElementById('loading').style.display = 'block';
+      if (rendition) rendition.destroy();
+
+      book = ePub(source);
+      rendition = book.renderTo("viewer", { width: "100%", height: "100%" });
+
+      // Restore font size
+      rendition.themes.fontSize(currentFontSize + "%");
+
+      // Display book at last saved location
+      rendition.display(lastLocation || undefined);
+
+      // Generate locations for slider
+      book.ready.then(() => book.locations.generate(1000)).then(() => {
+        locations = book.locations;
+        updatePageDisplay();
+        document.getElementById('loading').style.display = 'none';
+      });
+
+      // Jump to specific page by input
+document.getElementById("pageGo").onclick = () => {
+  if (!locations) return;
+  const pageNum = parseInt(document.getElementById("pageInput").value, 10);
+  const totalPages = locations.total;
+
+  if (pageNum >= 1 && pageNum <= totalPages) {
+    const cfi = locations.cfiFromLocation(pageNum);
+    if (cfi) rendition.display(cfi);
+  }
+};
+
+// Allow pressing Enter in input box
+document.getElementById("pageInput").addEventListener("keydown", e => {
+  if (e.key === "Enter") document.getElementById("pageGo").click();
+});
+
+      // Show actual title instead of file name
+      book.loaded.metadata.then(meta => {
+        document.getElementById("status").textContent = meta.title || "";
+      });
+
+      // Update page & save location on navigation
+      rendition.on("relocated", (loc) => {
+        lastLocation = loc.start.cfi;
+        localStorage.setItem("cfi", lastLocation);
+        updatePageDisplay();
+      });
+    }
+
+    function updatePageDisplay() {
+      if (!locations) return;
+      let slider = document.getElementById("pageSlider");
+      let pageInfo = document.getElementById("pageInfo");
+
+      let currentPage = locations.locationFromCfi(lastLocation) || 0;
+      let totalPages = locations.total;
+
+      slider.max = totalPages;
+      slider.value = currentPage;
+      pageInfo.textContent = `${currentPage} of ${totalPages}`;
+    }
+
+    // Navigation
+    document.getElementById("prev").onclick = () => rendition && rendition.prev();
+    document.getElementById("next").onclick = () => rendition && rendition.next();
+
+    // Slider navigation
+    document.getElementById("pageSlider").addEventListener("input", e => {
+      const loc = locations.cfiFromLocation(parseInt(e.target.value));
+      rendition.display(loc);
+    });
+
+    // Font size controls
+    document.getElementById("fontUp").onclick = () => {
+      currentFontSize += 10;
+      rendition.themes.fontSize(currentFontSize + "%");
+      localStorage.setItem("fontSize", currentFontSize);
+    };
+    document.getElementById("fontDown").onclick = () => {
+      currentFontSize = Math.max(50, currentFontSize - 10);
+      rendition.themes.fontSize(currentFontSize + "%");
+      localStorage.setItem("fontSize", currentFontSize);
+    };
+
+    // Reset button
+    document.getElementById("reset").onclick = () => {
+      localStorage.removeItem("cfi");
+      localStorage.removeItem("fontSize");
+      currentFontSize = 100;
+      lastLocation = null;
+      loadBook("Lessons from Surah al-Kahf.epub"); // reload fresh
+    };
+
+    // Auto-load Lessons from Surah al-Kahf.epub
+    fetch("Lessons from Surah al-Kahf.epub")
+      .then(resp => { if (!resp.ok) throw new Error("Not found"); return resp.blob(); })
+      .then(blob => {
+        loadBook(blob);
+      })
+      .catch(() => {
+        document.getElementById("status").textContent = "Failed to load test.epub";
+      });
+
+  // --- Keyboard navigation ---
+document.addEventListener("keydown", e => {
+  if (!rendition) return;
+  if (e.key === "ArrowLeft") {
+    rendition.prev();
+  } else if (e.key === "ArrowRight") {
+    rendition.next();
+  }
+});
+
+document.getElementById("viewer").addEventListener("touchend", e => {
+  const touchEndX = e.changedTouches[0].screenX;
+  if (!rendition) return;
+
+  if (touchEndX - touchStartX > 50) {
+    rendition.prev(); // swipe right → previous page
+  } else if (touchStartX - touchEndX > 50) {
+    rendition.next(); // swipe left → next page
+  }
+});
+
+  </script>
+</body>
+</html>

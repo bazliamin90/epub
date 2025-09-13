@@ -14,12 +14,17 @@
 <body>
   <header>
     <header3-component></header3-component>
-    <button id="prev">◀</button>
-    <button id="next">▶</button>
+    <button id="fontUp">A+</button>
+    <button id="fontDown">A-</button>
     <span id="status"></span>
   </header>
 
-  <div id="viewer"><div id="loading">Loading book…</div></div>
+<button id="prev">◀</button>
+<button id="next">▶</button>
+
+<div id="viewer">
+  <div id="loading">Loading book…</div>
+</div>
 
 <div id="controls">
   <span id="pageInfo">---</span>
@@ -27,8 +32,6 @@
   <div>
     <input type="number" id="pageInput" min="1" value="1" style="width:60px">
     <button id="pageGo">Go</button>
-    <button id="fontUp">A+</button>
-    <button id="fontDown">A-</button>
     <button id="reset">Reset</button>
   </div>
 </div>
@@ -152,12 +155,6 @@ document.addEventListener("keydown", e => {
   }
 });
 
-// --- Touch navigation (mobile swipe) ---
-let touchStartX = 0;
-document.getElementById("viewer").addEventListener("touchstart", e => {
-  touchStartX = e.changedTouches[0].screenX;
-});
-
 document.getElementById("viewer").addEventListener("touchend", e => {
   const touchEndX = e.changedTouches[0].screenX;
   if (!rendition) return;
@@ -167,26 +164,6 @@ document.getElementById("viewer").addEventListener("touchend", e => {
   } else if (touchStartX - touchEndX > 50) {
     rendition.next(); // swipe left → next page
   }
-});
-
-// --- Mouse drag navigation (desktop swipe) ---
-let mouseDownX = 0;
-let isDragging = false;
-
-document.getElementById("viewer").addEventListener("mousedown", e => {
-  mouseDownX = e.screenX;
-  isDragging = true;
-});
-
-document.getElementById("viewer").addEventListener("mouseup", e => {
-  if (!isDragging || !rendition) return;
-  const diff = e.screenX - mouseDownX;
-  if (diff > 50) {
-    rendition.prev(); // drag right
-  } else if (diff < -50) {
-    rendition.next(); // drag left
-  }
-  isDragging = false;
 });
 
   </script>
