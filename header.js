@@ -121,21 +121,14 @@ headerTemplate3.innerHTML = `
     type="text"
     class="search-box"
     id="search-box"
-    placeholder="Cari topik..."
+    placeholder="Cari buku..."
     aria-label="Search list items"
   />
   <ol id="list">
-    <li><a href="index.html">About</a></li>
-    <li><a href="008-tahriri.html">My Tahriri</a></li>
-	<hr><b>Topik</b><hr class="hrnone">
-	<li><a href="006-nabr.html">An-nabr</a></li>
-    <li><a href="007-hafs.html">Bacaan khusus Hafs-Syatibi</a></li>
-    <li><a>Mad</a>
-      <ul class="li2">
-          <li><a href="003-mad01.html">Tahap mad far'i</a></li>
-      </ul>  
-    </li>
-    <li><a href="002-ntm.html">Nun, tanwin, mim</a></li>
+    <li><a href="#">About</a></li>
+
+	<hr><b>Buku</b><hr class="hrnone">
+	<li><a href="index.html">The Sirah of The Prophet</a></li>
 	</ol>
 </div>
 `;
