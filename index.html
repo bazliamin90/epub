@@ -2,10 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>EPUB Reader with Memory + Reset</title>
+  <title>Sirah of The Prophet</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <link rel="stylesheet" href="style.css">
-
+  <script src="header.js"></script>
   <!-- JSZip + epub.js -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/epubjs/dist/epub.min.js"></script>
@@ -13,24 +13,24 @@
 </head>
 <body>
   <header>
+    <header3-component></header3-component>
     <button id="prev">◀</button>
     <button id="next">▶</button>
-    <button id="reset">↻</button>
     <span id="status"></span>
   </header>
 
   <div id="viewer"><div id="loading">Loading book…</div></div>
 
 <div id="controls">
-  <span id="pageInfo">Page ?</span>
+  <span id="pageInfo">---</span>
   <input type="range" id="pageSlider" min="0" max="100" value="0">
-
-  <!-- new page jump controls -->
-  <input type="number" id="pageInput" min="1" value="1" style="width:60px">
-  <button id="pageGo">Go</button>
-
-  <button id="fontUp">A+</button>
-  <button id="fontDown">A-</button>
+  <div>
+    <input type="number" id="pageInput" min="1" value="1" style="width:60px">
+    <button id="pageGo">Go</button>
+    <button id="fontUp">A+</button>
+    <button id="fontDown">A-</button>
+    <button id="reset">Reset</button>
+  </div>
 </div>
 
   <script>
@@ -98,7 +98,7 @@ document.getElementById("pageInput").addEventListener("keydown", e => {
 
       slider.max = totalPages;
       slider.value = currentPage;
-      pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
+      pageInfo.textContent = `${currentPage} of ${totalPages}`;
     }
 
     // Navigation
@@ -141,6 +141,54 @@ document.getElementById("pageInput").addEventListener("keydown", e => {
       .catch(() => {
         document.getElementById("status").textContent = "Failed to load test.epub";
       });
+
+  // --- Keyboard navigation ---
+document.addEventListener("keydown", e => {
+  if (!rendition) return;
+  if (e.key === "ArrowLeft") {
+    rendition.prev();
+  } else if (e.key === "ArrowRight") {
+    rendition.next();
+  }
+});
+
+// --- Touch navigation (mobile swipe) ---
+let touchStartX = 0;
+document.getElementById("viewer").addEventListener("touchstart", e => {
+  touchStartX = e.changedTouches[0].screenX;
+});
+
+document.getElementById("viewer").addEventListener("touchend", e => {
+  const touchEndX = e.changedTouches[0].screenX;
+  if (!rendition) return;
+
+  if (touchEndX - touchStartX > 50) {
+    rendition.prev(); // swipe right → previous page
+  } else if (touchStartX - touchEndX > 50) {
+    rendition.next(); // swipe left → next page
+  }
+});
+
+// --- Mouse drag navigation (desktop swipe) ---
+let mouseDownX = 0;
+let isDragging = false;
+
+document.getElementById("viewer").addEventListener("mousedown", e => {
+  mouseDownX = e.screenX;
+  isDragging = true;
+});
+
+document.getElementById("viewer").addEventListener("mouseup", e => {
+  if (!isDragging || !rendition) return;
+  const diff = e.screenX - mouseDownX;
+  if (diff > 50) {
+    rendition.prev(); // drag right
+  } else if (diff < -50) {
+    rendition.next(); // drag left
+  }
+  isDragging = false;
+});
+
   </script>
 </body>
 </html>
