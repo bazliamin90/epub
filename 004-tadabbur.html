@@ -6,6 +6,53 @@
   <script src="header.js"></script>
   <title>Tadabbur Ad-Dhuha - An-Nas</title>
 
+<style>
+  html, body {
+    margin: 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    font-family: monospace;
+    color: #e8eaed;
+    overflow: hidden;
+  }
+  /* Controls bar */
+  #controls {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    gap: .2rem;
+    padding: .2rem .8rem;
+    background: #000000;
+    z-index: 10;
+  }
+  #controls input, #controls select, #controls button {
+    background: #0b0d10;
+    color: #e8eaed;
+    border: 1px solid #222831;
+    border-radius: .25rem;
+    padding: .25rem .5rem;
+    font-family: monospace;
+  }
+  #controls button {
+    cursor: pointer;
+  }
+  #viewerContainer {
+    flex: 1 1 auto;
+    overflow: auto;
+    background: #ffffff;
+  }
+  .pdfViewer .page {
+    margin: 20px auto;
+    box-shadow: 0 0 12px rgba(0,0,0,.45);
+    border-radius: .5rem;
+    overflow: hidden;
+  }
+  .textLayer ::selection { 
+      background: rgb(108, 255, 118); 
+  }
+</style>
+
 <!-- PDF.js base CSS -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf_viewer.min.css" />
 <link rel="stylesheet" href="pdfstyle.css">
@@ -16,8 +63,10 @@
   <div id="controls">
     <header3-component></header3-component>
     <label>M/s:
+      <button id="prevBtn">Prev</button>
       <input type="number" id="pageInput" value="1" min="1" style="width:4rem">
       <button id="goBtn">Go</button>
+      <button id="nextBtn">Next</button>
     </label>
     <span id="pageCount">/ ?</span>
 
@@ -106,6 +155,16 @@
     document.getElementById("goBtn").addEventListener("click", () => {
       const page = parseInt(document.getElementById("pageInput").value, 10);
       goToPage(page);
+    });
+
+    // Prev button
+    document.getElementById("prevBtn").addEventListener("click", () => {
+      goToPage(viewer.currentPageNumber - 1);
+    });
+
+    // Next button
+    document.getElementById("nextBtn").addEventListener("click", () => {
+      goToPage(viewer.currentPageNumber + 1);
     });
 
     // Zoom control
