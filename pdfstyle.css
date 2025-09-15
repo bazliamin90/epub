@@ -1,13 +1,4 @@
-html, body {
-      margin: 0;
-      height: 100%;
-      background: #68fff2;
-      font-family: monospace;
-      color: #e8eaed;
-      overflow: hidden;
-    }
-    /* Controls bar */
-    #controls {
+#controls {
       display: flex;
       align-items: center;
       gap: .2rem;
