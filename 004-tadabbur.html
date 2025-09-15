@@ -17,6 +17,7 @@
     <header3-component></header3-component>
     <label>M/s:
       <input type="number" id="pageInput" value="1" min="1" style="width:4rem">
+      <button id="goBtn">Go</button>
     </label>
     <span id="pageCount">/ ?</span>
 
@@ -57,9 +58,7 @@
       textLayerMode: 2,
     });
 
-    // Attach viewer to container
     document.getElementById("viewer").appendChild(viewer.viewer);
-
     linkService.setViewer(viewer);
 
     let pdfDoc = null;
@@ -85,17 +84,28 @@
       linkService.setDocument(pdfDoc, null);
     }
 
-    // Load local 004-tadabbur.pdf
+    // Load local PDF
     openPDF("004-tadabbur.pdf");
 
-    // Page jump via input
-    document.getElementById("pageInput").addEventListener("change", (e) => {
-      let page = parseInt(e.target.value, 10);
+    function goToPage(page) {
       if (page > 0 && page <= pdfDoc.numPages) {
         viewer.currentPageNumber = page;
       } else {
-        e.target.value = viewer.currentPageNumber;
+        document.getElementById("pageInput").value = viewer.currentPageNumber;
       }
+    }
+
+    // Enter key on input
+    document.getElementById("pageInput").addEventListener("keyup", (e) => {
+      if (e.key === "Enter") {
+        goToPage(parseInt(e.target.value, 10));
+      }
+    });
+
+    // Go button
+    document.getElementById("goBtn").addEventListener("click", () => {
+      const page = parseInt(document.getElementById("pageInput").value, 10);
+      goToPage(page);
     });
 
     // Zoom control
