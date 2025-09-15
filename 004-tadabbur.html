@@ -13,12 +13,13 @@
 <body>
 
   <!-- Controls -->
-  <header3-component></header3-component>
-<div id="controls">
-    <label>M/s:
-      <input type="number" id="pageInput" value="1" min="1" style="width:4rem">
-    </label>
-    <span id="pageCount">/ ?</span>
+    <header>
+      <header3-component></header3-component>
+      <div id="controls">
+       <label>M/s:
+       <input type="number" id="pageInput" value="1" min="1" style="width:4rem">
+       </label>
+       <span id="pageCount">/ ?</span>
 
     <label style="margin-left:1rem">Zoom:
       <select id="zoomSelect">
@@ -30,7 +31,8 @@
         <option value="page-width">Fit W</option>
       </select>
     </label>
-  </div>
+       </div>
+    </header>
 
   <!-- PDF container -->
   <div id="viewerContainer">
