@@ -73,7 +73,7 @@
 
     .textLayer ::selection { background: rgb(108, 255, 118); }
 
-    @media screen and (max-width: 768px) {
+    @media screen and (max-width: 500px) {
       #controls {
       font-size: 0.8rem;
       }

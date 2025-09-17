@@ -68,7 +68,7 @@ headerTemplate3.innerHTML = `
 
 	.scroll-box li {
 		font-size: 0.9em;
-		padding-bottom: 5px;
+		padding-bottom: 10px;
 	}
 
 	ol li {
