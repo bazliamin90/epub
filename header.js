@@ -134,6 +134,7 @@ headerTemplate3.innerHTML = `
 	<li><a href="005.html">Pelajaran Hidup Surah Yusuf</a></li>
 	<li><a href="004.html">Tadabbur Ad-Dhuha - An-Nas</a></li>
 	<li><a href="index.html">The Sirah of The Prophet</a></li>
+	<li><a href="006.html">Thematic Tafsir (by juz')</a></li>
 	</ol>
 </div>
 `;
