@@ -44,6 +44,33 @@
       overflow: hidden;
       display: inline-block;
     }
+
+    #prevPage {
+      position: absolute;
+      top: 50%;
+      left: 2rem;
+      transform: translateY(-50%);
+      z-index: 9999;
+      opacity: 0.5;
+      background-color: transparent;
+      border: 1px solid rgb(197, 197, 197);
+      padding: 20px 4px;
+      cursor: pointer;
+    }
+
+    #nextPage {
+      position: absolute;
+      top: 50%;
+      right: 2rem;
+      transform: translateY(-50%);
+      z-index: 9999;
+      opacity: 0.5;
+      background-color: transparent;
+      border: 1px solid rgb(197, 197, 197);
+      padding: 20px 4px;
+      cursor: pointer;
+    }
+
     .textLayer ::selection { background: rgb(108, 255, 118); }
 
     @media screen and (max-width: 768px) {
@@ -54,4 +81,11 @@
       #controls input, #controls select, #controls button {
       font-size: 0.8rem;
       }
-    }
+
+      #prevPage {
+        left: 0.8rem; 
+      }
+
+      #nextPage {
+        right: 0.8rem;
+      }
