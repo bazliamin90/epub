@@ -39,12 +39,25 @@
   <!-- PDF container -->
   <div id="viewerContainer">
     <div id="viewer" class="pdfViewer"></div>
+  <div id="sliderContainer">
+    <input type="range" id="pageSlider" min="1" max="1" value="1">
+  </div>
   </div>
 
   <!-- PDF.js scripts -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf_viewer.min.js"></script>
   <script>
+    // Disable browser restoring scroll
+    if ("scrollRestoration" in history) {
+      history.scrollRestoration = "manual";
+    }
+
+    // Always scroll to top at reload
+    window.addEventListener("load", () => {
+      window.scrollTo(0, 0);
+    });
+
     pdfjsLib.GlobalWorkerOptions.workerSrc =
       "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
 
@@ -70,8 +83,13 @@
     const lastPageKey = pageKey + "_lastPage";
     const lastZoomKey = pageKey + "_lastZoom";
 
+    const pageSlider = document.getElementById("pageSlider");
+
     // When PDF is fully initialized
     eventBus.on("pagesinit", () => {
+      // Reset body scroll to top
+      window.scrollTo(0, 0);
+
       // Restore last zoom
       let savedZoom = localStorage.getItem(lastZoomKey);
       if (savedZoom) {
@@ -83,6 +101,7 @@
 
       document.getElementById("pageCount").textContent = "/" + pdfDoc.numPages;
       document.getElementById("pageInput").max = pdfDoc.numPages;
+      pageSlider.max = pdfDoc.numPages;
 
       // Restore last page
       let savedPage = parseInt(localStorage.getItem(lastPageKey), 10);
@@ -90,13 +109,15 @@
         viewer.currentPageNumber = savedPage;
       }
 
-      // Sync input with current page
+      // Sync input and slider with current page
       document.getElementById("pageInput").value = viewer.currentPageNumber;
+      pageSlider.value = viewer.currentPageNumber;
     });
 
     // When page changes
     eventBus.on("pagechanging", (e) => {
       document.getElementById("pageInput").value = e.pageNumber;
+      pageSlider.value = e.pageNumber;
       localStorage.setItem(lastPageKey, e.pageNumber);
     });
 
@@ -131,6 +152,14 @@
     document.getElementById("nextPage").addEventListener("click", () => {
       if (viewer.currentPageNumber < pdfDoc.numPages) {
         viewer.currentPageNumber += 1;
+      }
+    });
+
+    // Slider navigation
+    pageSlider.addEventListener("input", (e) => {
+      let page = parseInt(e.target.value, 10);
+      if (page > 0 && page <= pdfDoc.numPages) {
+        viewer.currentPageNumber = page;
       }
     });
 
