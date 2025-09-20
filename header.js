@@ -129,6 +129,7 @@ headerTemplate3.innerHTML = `
     <li><a href="#">About</a></li>
 
 	<hr><b>Buku</b><hr class="hrnone">
+	<li><a href="007.html">Ar-rahiq Al-makhtum</a></li>
 	<li><a href="003-kahf.html">Lessons From Surah Al-Kahfi</a></li>
 	<li><a href="002-yusuf.html">Lessons From Surah Yusuf</a></li>
 	<li><a href="005.html">Pelajaran Hidup Surah Yusuf</a></li>
