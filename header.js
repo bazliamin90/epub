@@ -80,6 +80,15 @@ headerTemplate3.innerHTML = `
 		padding: 5px 0 5px 20px;
 	}
 
+	ol li ol {
+		font-size: 1.1em;
+	}
+
+	ol li ol li {
+		margin-left: -10px;
+		list-style-type: lower-alpha;
+	}
+
 	#overlay {
 		position: fixed;
 		top: 0;
@@ -132,13 +141,19 @@ headerTemplate3.innerHTML = `
 	<li><a href="010.html">Allah Loves</a></li>
 	<li><a href="007.html">Ar-rahiq Al-makhtum</a></li>
 	<li><a href="003-kahf.html">Lessons From Surah Al-Kahfi</a></li>
-	<li><a href="002-yusuf.html">Lessons From Surah Yusuf</a></li>
+	<li><a href="012.html">Lessons From The Stories of The Quran</a></li>
 	<li><a href="009.html">Meeting Muhammad</a></li>
-	<li><a href="005.html">Pelajaran Hidup Surah Yusuf</a></li>
 	<li><a href="004.html">Tadabbur Ad-Dhuha - An-Nas</a></li>
 	<li><a href="008.html">The Parables of The Quran</a></li>
 	<li><a href="index.html">The Sirah of The Prophet</a></li>
 	<li><a href="006.html">Thematic Tafsir (by juz')</a></li>
+	<li>Surah Yusuf Series
+		<ol>
+			<li><a href="002-yusuf.html">Lessons From Surah Yusuf</a></li>
+			<li><a href="011.html">Lessons Learnt From The Story of Yusuf</a></li>
+			<li><a href="005.html">Pelajaran Hidup Surah Yusuf</a></li>
+		</ol>
+	</li>
 	</ol>
 </div>
 `;
