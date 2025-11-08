@@ -152,6 +152,8 @@ headerTemplate3.innerHTML = `
 			<li><a href="002-yusuf.html">Lessons From Surah Yusuf</a></li>
 			<li><a href="011.html">Lessons Learnt From The Story of Yusuf</a></li>
 			<li><a href="005.html">Pelajaran Hidup Surah Yusuf</a></li>
+			<li><a href="013.html">Tafsir Al-Munir: P1</a></li>
+			<li><a href="014.html">Tafsir Al-Munir: P2</a></li>
 		</ol>
 	</li>
 	</ol>
