@@ -139,6 +139,9 @@ headerTemplate3.innerHTML = `
 
 	<hr><b>Buku</b><hr class="hrnone">
 	<li><a href="010.html">Allah Loves</a></li>
+	<li><a href="028.html">Al salam: Al-layl</a></li>
+	<li><a href="029.html">Al salam: An-nasr</a></li>
+	<li><a href="030.html">Al salam: Stories of the Quran</a></li>
 	<li><a href="007.html">Ar-rahiq Al-makhtum</a></li>
 	<li>As-sa'di
 		<ol>
@@ -168,6 +171,7 @@ headerTemplate3.innerHTML = `
 			<li><a href="005.html">Fuad al Aris - Pelajaran Hidup Surah Yusuf</a></li>
 			<li><a href="023.html">Markaz al Salam - Taddabur Surah Yusuf</a></li>
 			<li><a href="024.html">Nouman Ali Khan - Surah Yusuf</a></li>
+			<li><a href="027.html">Abdulbary Yahya - Beautiful Patience</a></li>
 			<li><a href="013.html">Tafsir Al-Munir: P1</a></li>
 			<li><a href="014.html">Tafsir Al-Munir: P2</a></li>
 		</ol>
