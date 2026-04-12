@@ -2,123 +2,199 @@ const headerTemplate3 = document.createElement('template');
 
 headerTemplate3.innerHTML = `
 <style>
-	.menu {
-		border-radius: 4px;
-		padding: 2px 4px;
-		color: white;
-		background-color: #000000ff;
-		cursor: pointer;
-	}
+/* === Header Styling === */
+.header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0 8px;
+	width: 90%;
+    max-width: 900px;
+    position: sticky;
+    top: 0;
+    z-index: 998;
+    border-radius: 0 0 14px 14px;
+    backdrop-filter: blur(8px);
+    transition: all 0.3s ease;
+}
 
-	.scroll-box {
-		position: fixed;
-		top: 0;
-		left: 0;
-		height: 100vh;
-		width: 250px;
-		max-width: 90%;
-		border-right: 3px solid black;
-		padding: 10px;
-		background-color: white;
-		overflow-y: auto;
-		box-shadow: 2px 0 6px rgba(0, 0, 0, 0.2);
-		transition: transform 0.3s ease;
-		transform: translateX(-100%);
-		z-index: 1000;
-	}
+/* === Menu Buttons === */
+.menu {
+    max-width: 20px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 2px;
+    cursor: pointer;
+    display: block;
+    object-fit: contain;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
 
-	.scroll-box.visible {
-		transform: translateX(0);
-	}
+/* === Title === */
+h1 {
+    font-family: monospace;
+    font-size: 15px;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    padding: 5px 0;
+    margin: 0;
+    max-width: 50rem;
+}
 
-	.scroll-box .close-message {
-		font-family: monospace;
-		font-size: 8px;
-		color: grey;
-		margin-bottom: 10px;
-		text-align: center;
-		font-style: italic;
-	}
+h1 a {
+    text-decoration: none;
+    color: white;
+    background: linear-gradient(135deg, #444, #666);
+    border-radius: 6px;
+    padding: 8px 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: background 0.3s ease;
+}
 
-	.scroll-box .search-box {
-		width: 90%;
-		padding: 5px;
-		margin-bottom: 10px;
-		font-family: monospace;
-		font-size: 12px;
-		border: 1px solid blue;
-		border-radius: 4px;
-	}
+h1 a:hover {
+    background: linear-gradient(135deg, #333, #555);
+}
 
-	.scroll-box ol {
-		font-family: monospace;
-		margin: 0;
-		padding: 0;
-		list-style-position: outside;
-		padding-left: 3em;
-		color: red;
-	}
+/* === Scroll Box === */
+.scroll-box {
+    position: fixed;
+    top: 10px;
+    left: 0;
+    height: 70vh;
+    width: 260px;
+    max-width: 90%;
+    border-right: 3px solid #b3aaff;
+    padding: 14px 10px;
+    background: linear-gradient(180deg, #ffffff, #f8f9ff);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch; /* momentum scrolling */
+    touch-action: pan-y;
+    box-shadow: 4px 0 12px rgba(0, 0, 0, 0.25);
+    transform: translateX(-110%);
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1000;
+    border-radius: 0 10px 10px 0;
+    scroll-behavior: smooth;
+}
 
-	.scroll-box ol a {
-		font-family: monospace;
-		text-decoration: underline #ccc dotted;
-		text-underline-offset: 3px;
-		color: #555;
-	}
+.scroll-box.visible {
+    transform: translateX(0);
+}
 
-	.scroll-box li {
-		font-size: 0.9em;
-		padding-bottom: 5px;
-	}
+/* === Scroll fade top/bottom === */
+.fade-top,
+.fade-bottom {
+    position: sticky;
+    left: 0;
+    height: 22px;
+    z-index: 10;
+    pointer-events: none;
+}
 
-	ol li {
-		text-align: left;
-	}
+.fade-top {
+    top: 0;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));
+}
 
-	.li2 {
-		font-size: 12px;
-		padding: 5px 0 5px 20px;
-	}
+.fade-bottom {
+    bottom: 0;
+    background: linear-gradient(to top, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));
+}
 
-	ol li ol {
-		font-size: 1.1em;
-	}
+/* === Close message === */
+.close-message {
+    font-family: monospace;
+    font-size: 10px;
+    color: grey;
+    margin-bottom: 10px;
+    text-align: center;
+    font-style: italic;
+}
 
-	ol li ol li {
-		margin-left: -10px;
-		list-style-type: lower-alpha;
-	}
+/* === Search Box === */
+.search-box {
+    width: 92%;
+    padding: 6px;
+    font-family: monospace;
+    font-size: 13px;
+    border: 1px solid #8dafff;
+    border-radius: 6px;
+    outline: none;
+    transition: box-shadow 0.2s ease;
+}
 
-	#overlay {
-		position: fixed;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		background-color: rgba(0, 0, 0, 0.7);
-		display: none;
-		z-index: 999;
-		transition: opacity 0.3s ease;
-	}
+.search-box:focus {
+    box-shadow: 0 0 5px #9cbcff;
+}
 
-	#overlay.visible {
-		display: block;
-		opacity: 1;
-	}
-	
-	.hrnone {
-		border: 1px solid #f9f9f9;
-	}
+/* === List Section === */
+.scroll-box ol {
+    font-family: monospace;
+    margin: 5px 0;
+    padding: 0;
+    list-style-position: outside;
+    padding-left: 2.5em;
+    color: #555;
+}
 
-	#list {
-		margin: 20px 0;
-	}
+.scroll-box ol a {
+    font-family: monospace;
+    text-decoration: underline dotted #ccc;
+    text-underline-offset: 3px;
+    color: #333;
+    transition: color 0.2s ease;
+}
 
-	@media (max-width: 600px) {
-		.scroll-box {
-			width: 70%;
-		}
-	}
+.scroll-box ol a:hover {
+    color: #0073e6;
+}
+
+.scroll-box li {
+    font-size: 0.95em;
+    padding-bottom: 4px;
+}
+
+.hrnone {
+    border: 1px solid #f3f3f3;
+}
+
+/* === Overlay Background === */
+#overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease;
+    z-index: 999;
+}
+
+#overlay.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* === Responsive Mobile Adjustment === */
+@media (max-width: 600px) {
+    .header {
+	width: 100%;
+    border-radius: 0;
+	margin: 0;
+    }
+
+    .scroll-box {
+        width: 75%;
+    }
+
+    h1 {
+        font-size: 13px;
+    }
+}
 </style>
 
 <div class="header">
@@ -182,119 +258,83 @@ headerTemplate3.innerHTML = `
 `;
 
 class Header3 extends HTMLElement {
-	constructor() {
-		super();
-	}
+    connectedCallback() {
+        const shadowRoot = this.attachShadow({mode:'open'});
+        shadowRoot.appendChild(headerTemplate3.content.cloneNode(true));
 
-	connectedCallback() {
-		const shadowRoot = this.attachShadow({ mode: 'open' });
-		shadowRoot.appendChild(headerTemplate3.content.cloneNode(true));
+        const menu = shadowRoot.querySelector('.menu');
+        const scrollBox = shadowRoot.querySelector('#scroll-box');
+        const overlay = shadowRoot.querySelector('#overlay');
+        const searchBox = shadowRoot.querySelector('#search-box');
+        const list = shadowRoot.querySelector('#list');
+        const fadeTop = shadowRoot.querySelector('.fade-top');
+        const fadeBottom = shadowRoot.querySelector('.fade-bottom');
 
-		const menu = shadowRoot.querySelector('.menu');
-		const scrollBox = shadowRoot.querySelector('#scroll-box');
-		const overlay = shadowRoot.querySelector('#overlay');
-		const searchBox = shadowRoot.querySelector('#search-box');
-		const list = shadowRoot.querySelector('#list');
+        // === Touch scroll blocker (fixed for mobile) ===
+        function blockBackgroundScroll(e) {
+            const path = e.composedPath();
+            if (!path.includes(scrollBox)) e.preventDefault();
+        }
 
-		let preventTouchScroll = (e) => e.preventDefault();
+        // === Menu toggle ===
+        menu.addEventListener('click', e=>{e.stopPropagation(); toggleScrollBox();});
+        scrollBox.addEventListener('click', e=>e.stopPropagation());
+        searchBox.addEventListener('click', e=>e.stopPropagation());
+        overlay.addEventListener('click', hideScrollBox);
 
-		menu.addEventListener('click', (event) => {
-			event.stopPropagation();
-			toggleScrollBox(scrollBox, overlay);
-		});
+        document.addEventListener('click', e=>{
+            const path = e.composedPath();
+            if(scrollBox.classList.contains('visible') && !path.includes(scrollBox) && !path.some(el=>el.classList && el.classList.contains('menu'))){
+                hideScrollBox();
+            }
+        });
 
-		document.addEventListener('click', function (event) {
-			if (
-				scrollBox.classList.contains('visible') &&
-				!scrollBox.contains(event.target) &&
-				!event.target.matches('.menu')
-			) {
-				hideScrollBox(scrollBox, overlay);
-			}
-		});
+        function toggleScrollBox() { 
+            scrollBox.classList.contains('visible') ? hideScrollBox() : showScrollBox(); 
+        }
 
-		scrollBox.addEventListener('click', (event) => {
-			event.stopPropagation();
-		});
+        function showScrollBox() {
+            scrollBox.classList.add('visible');
+            overlay.classList.add('visible');
 
-		overlay.addEventListener('click', () => hideScrollBox(scrollBox, overlay));
+            const scrollBarWidth = window.innerWidth - document.documentElement.clientWidth;
+            document.body.style.overflow = 'hidden';
+            document.body.style.paddingRight = `${scrollBarWidth}px`;
 
-		function toggleScrollBox(scrollBox, overlay) {
-			if (scrollBox.classList.contains('visible')) {
-				hideScrollBox(scrollBox, overlay);
-			} else {
-				showScrollBox(scrollBox, overlay);
-			}
-		}
+            document.addEventListener('touchmove', blockBackgroundScroll, {passive:false});
+            updateFadeShadows();
+        }
 
-		function showScrollBox(scrollBox, overlay) {
-			scrollBox.classList.add('visible');
-			overlay.classList.add('visible');
+        function hideScrollBox() {
+            scrollBox.classList.remove('visible');
+            overlay.classList.remove('visible');
 
-			// Disable background scrolling (desktop)
-			const scrollBarWidth = window.innerWidth - document.documentElement.clientWidth;
-			document.body.style.overflow = 'hidden';
-			document.body.style.paddingRight = `${scrollBarWidth}px`;
+            document.body.style.overflow = '';
+            document.body.style.paddingRight = '';
 
-			// Disable touch scrolling (mobile)
-			document.addEventListener('touchmove', preventTouchScroll, { passive: false });
-		}
+            document.removeEventListener('touchmove', blockBackgroundScroll);
+        }
 
-		function hideScrollBox(scrollBox, overlay) {
-			scrollBox.classList.remove('visible');
-			overlay.classList.remove('visible');
+        // === Scroll fade shadows ===
+        scrollBox.addEventListener('scroll', updateFadeShadows);
+        function updateFadeShadows() {
+            const atTop = scrollBox.scrollTop <= 5;
+            const atBottom = scrollBox.scrollHeight - scrollBox.clientHeight - scrollBox.scrollTop <= 5;
+            fadeTop.style.opacity = atTop ? "0" : "1";
+            fadeBottom.style.opacity = atBottom ? "0" : "1";
+        }
 
-			// Re-enable background scrolling
-			document.body.style.overflow = '';
-			document.body.style.paddingRight = '';
-
-			// Re-enable touch scrolling
-			document.removeEventListener('touchmove', preventTouchScroll);
-		}
-
-		// Search functionality
-		searchBox.addEventListener('input', function () {
-			const filter = searchBox.value.toLowerCase();
-			const items = list.querySelectorAll('li');
-			const headings = list.querySelectorAll('b');
-			const horizontalRules = list.querySelectorAll('hr');
-
-			items.forEach((item) => {
-				const text = item.textContent.toLowerCase();
-				item.style.display = text.includes(filter) ? '' : 'none';
-			});
-
-			if (!filter) {
-				headings.forEach((heading) => heading.style.display = '');
-				horizontalRules.forEach((hr) => hr.style.display = '');
-				return;
-			}
-
-			headings.forEach((heading) => {
-				const listItems = heading.nextElementSibling
-					? heading.nextElementSibling.querySelectorAll('li')
-					: [];
-				let anyVisible = false;
-
-				listItems.forEach((item) => {
-					if (item.style.display !== 'none') {
-						anyVisible = true;
-					}
-				});
-
-				heading.style.display = anyVisible ? '' : 'none';
-			});
-
-			horizontalRules.forEach((hr) => {
-				const nextSibling = hr.nextElementSibling;
-				if (nextSibling && nextSibling.style.display !== 'none') {
-					hr.style.display = '';
-				} else {
-					hr.style.display = 'none';
-				}
-			});
-		});
-	}
+        // === Search filter ===
+        searchBox.addEventListener('input', ()=>{
+            const filter = searchBox.value.toLowerCase();
+            list.querySelectorAll('li').forEach(li=>{
+                li.style.display = li.textContent.toLowerCase().includes(filter) ? '' : 'none';
+            });
+            list.querySelectorAll('b, hr').forEach(el=>{
+                el.style.display = filter ? 'none' : '';
+            });
+        });
+    }
 }
 
 customElements.define('header3-component', Header3);
