@@ -20,11 +20,10 @@ headerTemplate3.innerHTML = `
 
 /* === Menu Buttons === */
 .menu {
-    max-width: 20px;
     border: 1px solid #ccc;
     background-color: #fff;
     border-radius: 8px;
-    padding: 2px;
+    padding: 2px 4px;
     cursor: pointer;
     display: block;
     object-fit: contain;
