@@ -160,9 +160,9 @@ headerTemplate3.innerHTML = `
 	<li><a href="006.html">Thematic Tafsir (by juz')</a></li>
 	<li>Surah Yusuf Series
 		<ol>
-			<li><a href="002-yusuf.html">Lessons From Surah Yusuf</a></li>
-			<li><a href="011.html">Lessons Learnt From The Story of Yusuf</a></li>
-			<li><a href="005.html">Pelajaran Hidup Surah Yusuf</a></li>
+			<li><a href="002-yusuf.html">Yasir Qadhi - Lessons From Surah Yusuf</a></li>
+			<li><a href="011.html">As-sa'di - Lessons Learnt From The Story of Yusuf</a></li>
+			<li><a href="005.html">Fuad al Aris - Pelajaran Hidup Surah Yusuf</a></li>
 			<li><a href="013.html">Tafsir Al-Munir: P1</a></li>
 			<li><a href="014.html">Tafsir Al-Munir: P2</a></li>
 		</ol>
