@@ -68,7 +68,7 @@ headerTemplate3.innerHTML = `
 
 	.scroll-box li {
 		font-size: 0.9em;
-		padding-bottom: 10px;
+		padding-bottom: 5px;
 	}
 
 	ol li {
@@ -140,6 +140,17 @@ headerTemplate3.innerHTML = `
 	<hr><b>Buku</b><hr class="hrnone">
 	<li><a href="010.html">Allah Loves</a></li>
 	<li><a href="007.html">Ar-rahiq Al-makhtum</a></li>
+	<li>As-sa'di
+		<ol>
+			<li><a href="015.html">Juz 10-12</a></li>
+			<li><a href="016.html">Juz 13-15</a></li>
+			<li><a href="017.html">Juz 16-18</a></li>
+			<li><a href="018.html">Juz 19-21</a></li>
+			<li><a href="019.html">Juz 22-24</a></li>
+			<li><a href="020.html">Juz 25-27</a></li>
+			<li><a href="021.html">Juz 28-30</a></li>
+		</ol>
+	</li>
 	<li><a href="003-kahf.html">Lessons From Surah Al-Kahfi</a></li>
 	<li><a href="012.html">Lessons From The Stories of The Quran</a></li>
 	<li><a href="009.html">Meeting Muhammad</a></li>
