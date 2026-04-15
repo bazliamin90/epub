@@ -242,6 +242,7 @@ h1 a:hover {
 		<ol>
 			<li><a href="022.html">Bayyinah Translation: Yusuf</a></li>
 			<li><a href="002-yusuf.html">Yasir Qadhi - Lessons From Surah Yusuf</a></li>
+            <li><a href="031.html">As-sa'di - 33 Lessons From Surah Yusuf</a></li>
 			<li><a href="011.html">As-sa'di - Lessons Learnt From The Story of Yusuf</a></li>
 			<li><a href="005.html">Fuad al Aris - Pelajaran Hidup Surah Yusuf</a></li>
 			<li><a href="023.html">Markaz al Salam - Taddabur Surah Yusuf</a></li>
