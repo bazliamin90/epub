@@ -23,7 +23,7 @@ headerTemplate3.innerHTML = `
     border: 1px solid #ccc;
     background-color: #fff;
     border-radius: 8px;
-    padding: 2px 4px;
+    padding: 2px 6px;
     cursor: pointer;
     display: block;
     object-fit: contain;
