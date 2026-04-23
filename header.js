@@ -263,6 +263,11 @@ h1 a:hover {
             <li><a href="025.html">Nouman Ali Khan</a></li>
         </ol>
     </li>
+    <li>Surah 093. Ad-dhuha
+        <ol>
+            <li><a href="032.html">Al-munir</a></li>
+        </ol>
+    </li>
     <li>Surah 110. An-nasr
         <ol>
             <li><a href="029.html">Markaz al Salam</a></li>
