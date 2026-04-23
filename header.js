@@ -214,8 +214,6 @@ h1 a:hover {
 
 	<hr><b>Buku</b><hr class="hrnone">
 	<li><a href="010.html">Allah Loves</a></li>
-	<li><a href="028.html">Al salam: Al-layl</a></li>
-	<li><a href="029.html">Al salam: An-nasr</a></li>
 	<li><a href="030.html">Al salam: Stories of the Quran</a></li>
 	<li><a href="007.html">Ar-rahiq Al-makhtum</a></li>
 	<li>As-sa'di
@@ -229,29 +227,47 @@ h1 a:hover {
 			<li><a href="021.html">Juz 28-30</a></li>
 		</ol>
 	</li>
-	<li><a href="003-kahf.html">Lessons From Surah Al-Kahfi</a></li>
 	<li><a href="012.html">Lessons From The Stories of The Quran</a></li>
 	<li><a href="009.html">Meeting Muhammad</a></li>
-	<li><a href="025.html">Nouman Ali Khan - Al-layl</a></li>
-	<li><a href="026.html">Syafi Uthmani - Fussilat</a></li>
 	<li><a href="004.html">Tadabbur Ad-Dhuha - An-Nas</a></li>
 	<li><a href="008.html">The Parables of The Quran</a></li>
 	<li><a href="index.html">The Sirah of The Prophet</a></li>
 	<li><a href="006.html">Thematic Tafsir (by juz')</a></li>
-	<li>Surah Yusuf Series
+	<li>Surah 012. Yusuf
 		<ol>
-			<li><a href="022.html">Bayyinah Translation: Yusuf</a></li>
-			<li><a href="002-yusuf.html">Yasir Qadhi - Lessons From Surah Yusuf</a></li>
-            <li><a href="031.html">As-sa'di - 33 Lessons From Surah Yusuf</a></li>
-			<li><a href="011.html">As-sa'di - Lessons Learnt From The Story of Yusuf</a></li>
-			<li><a href="005.html">Fuad al Aris - Pelajaran Hidup Surah Yusuf</a></li>
-			<li><a href="023.html">Markaz al Salam - Taddabur Surah Yusuf</a></li>
-			<li><a href="024.html">Nouman Ali Khan - Surah Yusuf</a></li>
-			<li><a href="027.html">Abdulbary Yahya - Beautiful Patience</a></li>
+			<li><a href="022.html">Bayyinah Translation</a></li>
+			<li><a href="002-yusuf.html">Dr. Yasir Qadhi</a></li>
+            <li><a href="031.html">As-sa'di - 33 Lessons</a></li>
+			<li><a href="011.html">As-sa'di</a></li>
+			<li><a href="005.html">Fuad al Aris</a></li>
+			<li><a href="023.html">Markaz al Salam</a></li>
+			<li><a href="024.html">Nouman Ali Khan</a></li>
+			<li><a href="027.html">Syeikh Abdulbary Yahya</a></li>
 			<li><a href="013.html">Tafsir Al-Munir: P1</a></li>
 			<li><a href="014.html">Tafsir Al-Munir: P2</a></li>
 		</ol>
 	</li>
+    <li>Surah 018. Al-kahfi
+        <ol>
+            <li><a href="003-kahf.html">Dr. Yasir Qadhi</a></li>
+        </ol>
+    </li>
+    <li>Surah 041. Fussilat
+        <ol>
+            <li><a href="026.html">Syafi Uthmani</a></li>
+        </ol>
+    </li>
+    <li>Surah 092. Al-layl
+        <ol>
+            <li><a href="028.html">Markaz al Salam</a></li>
+            <li><a href="025.html">Nouman Ali Khan</a></li>
+        </ol>
+    </li>
+    <li>Surah 110. An-nasr
+        <ol>
+            <li><a href="029.html">Markaz al Salam</a></li>
+        </ol>
+    </li>
 	</ol>
 	<center><p style="font-size: 1em; color: #000000">°❀⋆.ೃ࿔*:･°❀⋆.ೃ࿔*:･</p></center><br><br>
 </div>
