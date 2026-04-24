@@ -346,15 +346,48 @@ class Header3 extends HTMLElement {
         }
 
         // === Search filter ===
-        searchBox.addEventListener('input', ()=>{
-            const filter = searchBox.value.toLowerCase();
-            list.querySelectorAll('li').forEach(li=>{
-                li.style.display = li.textContent.toLowerCase().includes(filter) ? '' : 'none';
+        // === Search filter (parent-child aware) ===
+searchBox.addEventListener('input', () => {
+    const filter = searchBox.value.toLowerCase();
+
+    const allItems = list.querySelectorAll('li');
+
+    // Step 1: reset all
+    allItems.forEach(li => li.style.display = 'none');
+
+    // Step 2: process each item
+    allItems.forEach(li => {
+        const text = li.firstChild.textContent.toLowerCase();
+        const matches = text.includes(filter);
+
+        if (filter === '') {
+            li.style.display = '';
+            return;
+        }
+
+        if (matches) {
+            // ✅ Show this item
+            li.style.display = '';
+
+            // ✅ Show ALL children
+            li.querySelectorAll('li').forEach(child => {
+                child.style.display = '';
             });
-            list.querySelectorAll('b, hr').forEach(el=>{
-                el.style.display = filter ? 'none' : '';
-            });
-        });
+
+            // ✅ Show ALL parents
+            let parent = li.parentElement.closest('li');
+            while (parent) {
+                parent.style.display = '';
+                parent = parent.parentElement.closest('li');
+            }
+        }
+    });
+
+    // Hide section headers when searching
+    list.querySelectorAll('b, hr').forEach(el => {
+        el.style.display = filter ? 'none' : '';
+    });
+});
     }
 }
 

@@ -34,22 +34,24 @@
     }
 
     #viewerContainer {
-      position: absolute;
-      top: 35px;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      overflow: auto;
-      background: #ffffff;
-      text-align: center;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
     }
     
     #viewer {
-      _margin: 20px auto;
-      _box-shadow: 0 0 12px rgba(0,0,0,.45);
-      _border-radius: .5rem;
-      _overflow: auto;
-      _display: inline-block;
+      overflow: auto;
+      border: 1px solid red;
+      height: 85vh;
+    }
+
+    #sliderContainer {
+      position: sticky;
+      bottom: 0;
+      z-index: 999;
+      background:#f9f9f9; 
+      border-top:1px solid #ccc;
+      padding: .2rem .8rem;
     }
 
     #prevPage {
@@ -78,14 +80,6 @@
       cursor: pointer;
     }
    
-    #sliderContainer {
-      position: sticky;
-      bottom: 0;
-      z-index: 999;
-      background:#f9f9f9; 
-      border-top:1px solid #ccc;
-      padding: .2rem .8rem;
-    }
     #pageSlider {
       width: 100%;
     }
