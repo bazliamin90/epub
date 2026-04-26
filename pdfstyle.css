@@ -46,25 +46,24 @@
       overflow-x: auto;
       background: #ffffff;
       text-align: center;
-      height: 85vh;
+      height: 95vh;
       border-bottom: 1px solid black;
     }
     
     #viewer {
       display: inline-block;
       border: 1px dotted black;
-      margin-top: 2rem;
+      margin-top: 5rem;
       margin-bottom: 2rem;
     }
 
     #sliderContainer {
       position: absolute;
-      bottom: 0.4rem;
+      top: 3rem;
       left: 50%;
       transform: translateX(-50%);
       z-index: 999;
-      background:#ffffff; 
-      _border: 1px solid black;
+      background:#c8ff0045; 
       border-radius: 10px;
       padding: .2rem .8rem;
       width: 90%;
@@ -122,8 +121,7 @@
         right: 0.8rem;
       }
 
-      #sliderContainer {
-      bottom: 0;
-      padding: .1rem .8rem;
+      #viewerContainer {
+        height: 90vh;
       }
       }
