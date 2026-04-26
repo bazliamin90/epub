@@ -37,16 +37,33 @@
       position: absolute;
       left: 0;
       right: 0;
-      overflow: auto;
+      overflow-x: auto;
       background: #ffffff;
       text-align: center;
-      height: 90vh;
+      height: 95vh;
+      border-bottom: 1px solid black;
     }
     
     #viewer {
       display: inline-block;
       border: 1px dotted black;
-      margin: 60px 10px;
+      margin-bottom: 7rem;
+    }
+
+    #sliderContainer {
+      position: absolute;
+      bottom: 1.4rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 999;
+      background:#ffffff; 
+      border: 1px solid black;
+      border-radius: 10px;
+      padding: .2rem .8rem;
+      width: 80%;
+      margin: 0 auto;
+      display: grid;
+      place-items: center;
     }
 
     #prevPage {
@@ -73,19 +90,6 @@
       border: 1px solid rgb(197, 197, 197);
       padding: 20px 4px;
       cursor: pointer;
-    }
-   
-    #sliderContainer {
-      position: sticky;
-      z-index: 999;
-      background:#f9f9f9; 
-      border: 1px solid black;
-      border-radius: 10px;
-      padding: .2rem .8rem;
-      width: 80%;
-      margin: 0 auto;
-      display: grid;
-      place-items: center;
     }
     
     #pageSlider {
