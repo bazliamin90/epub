@@ -33,6 +33,12 @@
       font-family: monospace;
     }
 
+    _#bigcontainer {
+      position: relative;
+      height: 80vh;
+      border: 1px solid red;
+    }
+    
     #viewerContainer {
       position: absolute;
       left: 0;
@@ -40,27 +46,28 @@
       overflow-x: auto;
       background: #ffffff;
       text-align: center;
-      height: 95vh;
+      height: 85vh;
       border-bottom: 1px solid black;
     }
     
     #viewer {
       display: inline-block;
       border: 1px dotted black;
-      margin-bottom: 7rem;
+      margin-top: 2rem;
+      margin-bottom: 2rem;
     }
 
     #sliderContainer {
       position: absolute;
-      bottom: 1.4rem;
+      bottom: 0.4rem;
       left: 50%;
       transform: translateX(-50%);
       z-index: 999;
       background:#ffffff; 
-      border: 1px solid black;
+      _border: 1px solid black;
       border-radius: 10px;
       padding: .2rem .8rem;
-      width: 80%;
+      width: 90%;
       margin: 0 auto;
       display: grid;
       place-items: center;
@@ -113,5 +120,10 @@
 
       #nextPage {
         right: 0.8rem;
+      }
+
+      #sliderContainer {
+      bottom: 0;
+      padding: .1rem .8rem;
       }
       }
