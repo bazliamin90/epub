@@ -254,6 +254,7 @@ h1 a:hover {
     </li>
     <li>Surah 041. Fussilat
         <ol>
+            <li><a href="033.html">Al-munir - Juz 25</a></li>
             <li><a href="026.html">Syafi Uthmani</a></li>
         </ol>
     </li>
