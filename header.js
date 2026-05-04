@@ -258,6 +258,11 @@ h1 a:hover {
             <li><a href="026.html">Syafi Uthmani</a></li>
         </ol>
     </li>
+    <li>Surah 042. Asy-syura
+        <ol>
+            <li><a href="034.html">Al-munir</a></li>
+        </ol>
+    </li>
     <li>Surah 092. Al-layl
         <ol>
             <li><a href="028.html">Markaz al Salam</a></li>
