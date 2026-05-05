@@ -206,13 +206,13 @@ h1 a:hover {
     type="text"
     class="search-box"
     id="search-box"
-    placeholder="Cari buku..."
+    placeholder="Cari bahan bacaan..."
     aria-label="Search list items"
   />
   <ol id="list">
     <li><a href="#">About</a></li>
 
-	<hr><b>Buku</b><hr class="hrnone">
+	<hr><b>Bahan bacaan</b><hr class="hrnone">
 	<li><a href="010.html">Allah Loves</a></li>
 	<li><a href="030.html">Al salam: Stories of the Quran</a></li>
 	<li><a href="007.html">Ar-rahiq Al-makhtum</a></li>
