@@ -212,7 +212,7 @@ h1 a:hover {
   <ol id="list">
     <li><a href="#">About</a></li>
 
-	<hr><b>Bahan bacaan</b><hr class="hrnone">
+	<hr><b>Bacaan Islami</b><hr class="hrnone">
 	<li><a href="010.html">Allah Loves</a></li>
 	<li><a href="030.html">Al salam: Stories of the Quran</a></li>
 	<li><a href="007.html">Ar-rahiq Al-makhtum</a></li>
@@ -227,7 +227,8 @@ h1 a:hover {
 			<li><a href="021.html">Juz 28-30</a></li>
 		</ol>
 	</li>
-	<li><a href="012.html">Lessons From The Stories of The Quran</a></li>
+	<li><a href="037.html">Jin, syaitan, iblis</a></li>
+    <li><a href="012.html">Lessons From The Stories of The Quran</a></li>
 	<li><a href="009.html">Meeting Muhammad</a></li>
 	<li><a href="004.html">Tadabbur Ad-Dhuha - An-Nas</a></li>
 	<li><a href="008.html">The Parables of The Quran</a></li>
@@ -277,6 +278,18 @@ h1 a:hover {
     <li>Surah 110. An-nasr
         <ol>
             <li><a href="029.html">Markaz al Salam</a></li>
+        </ol>
+    </li>
+    <li>Bazli's tadabbur notes
+        <ol>
+            <li><a href="035.html">111. Al-masad</a></li>
+        </ol>
+    </li>
+
+    <hr><b>Public Health</b><hr class="hrnone">
+    <li>Biostatistics
+        <ol>
+            <li><a href="036.html">Wiley - Introductory Biostatistics</a></li>
         </ol>
     </li>
 	</ol>

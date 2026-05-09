@@ -4,11 +4,11 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <script src="header.js"></script>
-  <title>al-masad</title>
+  <title>Intro Biostats</title>
 
   <!-- PDF.js base CSS -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf_viewer.min.css" />
-  <link rel="stylesheet" href="pdfstyle2.css" />
+  <link rel="stylesheet" href="pdfstyle.css" />
 </head>
 <body>
   <!-- Controls -->
@@ -33,6 +33,9 @@
     </label>
   </div>
 
+  <button id="prevPage">◀</button>
+  <button id="nextPage">▶</button>
+
   <!-- PDF container -->
   <div id="viewerContainer">
     <div id="viewer" class="pdfViewer"></div>
@@ -45,6 +48,9 @@
       <div>
         <label id="searchlabel" style="margin-left:1rem">
           <input type="text" id="searchInput" placeholder="Search…" style="width:8rem">
+          <button id="findPrev">◀</button>
+          <button id="findNext">▶</button>
+          <button id="findReset">✖</button>
         </label>
       </div>
   </div>
@@ -72,8 +78,8 @@
     const linkService = new pdfjsViewer.PDFLinkService({ eventBus });
     const findController = new pdfjsViewer.PDFFindController({ eventBus, linkService });
 
-    // Continuous up-to-down Page Viewer
-    const viewer = new pdfjsViewer.PDFViewer({
+    // Single Page Viewer
+    const viewer = new pdfjsViewer.PDFSinglePageViewer({
       container,
       eventBus,
       linkService,
@@ -134,16 +140,19 @@
       linkService.setDocument(pdfDoc, null);
     }
 
-    // ===== GOOGLE Doc to PDF LOADER =====
+    // ===== GOOGLE DRIVE PDF LOADER =====
 
-// Google Docs file ID
-const docId = "1r5iPr4PfIN0pkKpObSzJpbST79SclDAmUrGI7MDkW-Y";
+// Your Google Drive file ID
+const fileId = "1KjI04eS58NeJCjl5C3xLMOmNGbmq66a1";
 
-// Export Google Doc as PDF
+// Your Google API key
+const apiKey = "AIzaSyAvIBAG9Vl_88uRML8MZjdbaKSKLbaqnVU";
+
+// Generate Drive API URL
 const pdfUrl =
-  `https://docs.google.com/document/d/${docId}/export?format=pdf`;
+  `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media&key=${apiKey}`;
 
-// Load into PDF.js
+// Load PDF
 openPDF(pdfUrl);
 
     // Page input jump

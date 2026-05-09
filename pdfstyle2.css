@@ -39,6 +39,11 @@
       border: 1px solid red;
     }
     
+    /* hide useless first page */
+    .pdfViewer .page[data-page-number="1"] {
+      display: none !important;
+    }
+
     #viewerContainer {
       position: absolute;
       left: 0;
@@ -75,6 +80,7 @@
     }
 
     #prevPage {
+      display: none;
       position: absolute;
       top: 50%;
       left: 2rem;
@@ -87,6 +93,7 @@
     }
 
     #nextPage {
+      display: none;
       position: absolute;
       top: 50%;
       right: 2rem;

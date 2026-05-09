@@ -4,11 +4,11 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <script src="header.js"></script>
-  <title>biostat</title>
+  <title>Al-masad</title>
 
   <!-- PDF.js base CSS -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf_viewer.min.css" />
-  <link rel="stylesheet" href="pdfstyle.css" />
+  <link rel="stylesheet" href="pdfstyle2.css" />
 </head>
 <body>
   <!-- Controls -->
@@ -43,7 +43,7 @@
 
   <div id="sliderContainer">
       <div>
-        <input type="range" id="pageSlider" min="1" max="1" value="1">
+        <input type="range" id="pageSlider" min="2" max="1" value="2">
       </div>
       <div>
         <label id="searchlabel" style="margin-left:1rem">
@@ -78,8 +78,8 @@
     const linkService = new pdfjsViewer.PDFLinkService({ eventBus });
     const findController = new pdfjsViewer.PDFFindController({ eventBus, linkService });
 
-    // Single Page Viewer
-    const viewer = new pdfjsViewer.PDFSinglePageViewer({
+    // Continuous up-to-down Page Viewer
+    const viewer = new pdfjsViewer.PDFViewer({
       container,
       eventBus,
       linkService,
@@ -140,19 +140,16 @@
       linkService.setDocument(pdfDoc, null);
     }
 
-    // ===== GOOGLE DRIVE PDF LOADER =====
+    // ===== GOOGLE Doc to PDF LOADER =====
 
-// Your Google Drive file ID
-const fileId = "1KjI04eS58NeJCjl5C3xLMOmNGbmq66a1";
+// Google Docs file ID
+const docId = "1r5iPr4PfIN0pkKpObSzJpbST79SclDAmUrGI7MDkW-Y";
 
-// Your Google API key
-const apiKey = "AIzaSyAvIBAG9Vl_88uRML8MZjdbaKSKLbaqnVU";
-
-// Generate Drive API URL
+// Export Google Doc as PDF
 const pdfUrl =
-  `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media&key=${apiKey}`;
+  `https://docs.google.com/document/d/${docId}/export?format=pdf`;
 
-// Load PDF
+// Load into PDF.js
 openPDF(pdfUrl);
 
     // Page input jump
