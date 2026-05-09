@@ -145,15 +145,25 @@
 // Your Google Drive file ID
 const fileId = "1vahPBaKpuIEzFiqpY1CeU62J6rs0jce_";
 
-// Your Google API key
-const apiKey = "AIzaSyAvIBAG9Vl_88uRML8MZjdbaKSKLbaqnVU";
+// Your Apps Script Web App URL
+const webAppUrl =
+  "https://script.google.com/macros/s/AKfycbybEnjqqY6yuKaZFJn9-82GK1pKHmven8o8OH2gJsNkZzE6KiJJ0A1IjP1En7O9LZD3/exec";
 
-// Generate Drive API URL
-const pdfUrl =
-  `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media&key=${apiKey}`;
+// Request secure PDF URL
+fetch(`${webAppUrl}?fileId=${fileId}`)
+  .then(res => res.json())
+  .then(data => {
 
-// Load PDF
-openPDF(pdfUrl);
+    if (data.url) {
+      openPDF(data.url);
+    } else {
+      console.error("Failed to get PDF URL");
+    }
+
+  })
+  .catch(err => {
+    console.error("Error:", err);
+  });
 
     // Page input jump
     document.getElementById("pageInput").addEventListener("change", (e) => {
