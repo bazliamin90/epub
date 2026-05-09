@@ -4,21 +4,21 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <script src="header.js"></script>
-  <title>Intro Biostats</title>
+  <title>About</title>
 
   <!-- PDF.js base CSS -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf_viewer.min.css" />
-  <link rel="stylesheet" href="pdfstyle.css" />
+  <link rel="stylesheet" href="pdfstyle2.css" />
 </head>
 <body>
   <!-- Controls -->
   <div id="controls">
     <header3-component></header3-component>
 
-    <label>
+    <label style="display:none">
       <input type="number" id="pageInput" value="1" min="1" style="width:4rem">
     </label>
-    <span id="pageCount">/--</span>
+    <span id="pageCount" style="display:none">/--</span>
 
     <label style="margin-left:1rem">
       <select id="zoomSelect">
@@ -43,7 +43,7 @@
 
   <div id="sliderContainer">
       <div>
-        <input type="range" id="pageSlider" min="1" max="1" value="1">
+        <input type="range" id="pageSlider" min="2" max="1" value="2">
       </div>
       <div>
         <label id="searchlabel" style="margin-left:1rem">
@@ -78,8 +78,8 @@
     const linkService = new pdfjsViewer.PDFLinkService({ eventBus });
     const findController = new pdfjsViewer.PDFFindController({ eventBus, linkService });
 
-    // Single Page Viewer
-    const viewer = new pdfjsViewer.PDFSinglePageViewer({
+    // Continuous up-to-down Page Viewer
+    const viewer = new pdfjsViewer.PDFViewer({
       container,
       eventBus,
       linkService,
@@ -140,30 +140,17 @@
       linkService.setDocument(pdfDoc, null);
     }
 
-// ===== GOOGLE DRIVE PDF LOADER =====
+    // ===== GOOGLE Doc to PDF LOADER =====
 
-// Google Drive file ID
-const fileId = "1KjI04eS58NeJCjl5C3xLMOmNGbmq66a1";
+// Google Docs file ID
+const docId = "14rf39li35oFBQZzX31sQ-KAN3KdmjwbRYTVJfYyVmGg";
 
-// Your Apps Script Web App URL
-const webAppUrl =
-  "https://script.google.com/macros/s/AKfycbybEnjqqY6yuKaZFJn9-82GK1pKHmven8o8OH2gJsNkZzE6KiJJ0A1IjP1En7O9LZD3/exec";
+// Export Google Doc as PDF
+const pdfUrl =
+  `https://docs.google.com/document/d/${docId}/export?format=pdf`;
 
-// Request secure PDF URL
-fetch(`${webAppUrl}?fileId=${fileId}`)
-  .then(res => res.json())
-  .then(data => {
-
-    if (data.url) {
-      openPDF(data.url);
-    } else {
-      console.error("Failed to get PDF URL");
-    }
-
-  })
-  .catch(err => {
-    console.error("Error:", err);
-  });
+// Load into PDF.js
+openPDF(pdfUrl);
 
     // Page input jump
     document.getElementById("pageInput").addEventListener("change", (e) => {

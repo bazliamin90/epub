@@ -210,7 +210,7 @@ h1 a:hover {
     aria-label="Search list items"
   />
   <ol id="list">
-    <li><a href="#">About</a></li>
+    <li><a href="about.html">About</a></li>
 
 	<hr><b>Bacaan Islami</b><hr class="hrnone">
 	<li><a href="010.html">Allah Loves</a></li>

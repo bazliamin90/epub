@@ -43,7 +43,7 @@
     .pdfViewer .page[data-page-number="1"] {
       display: none !important;
     }
-
+    
     #viewerContainer {
       position: absolute;
       left: 0;
