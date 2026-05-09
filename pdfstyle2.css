@@ -33,21 +33,45 @@
       font-family: monospace;
     }
 
+    _#bigcontainer {
+      position: relative;
+      height: 80vh;
+      border: 1px solid red;
+    }
+    
     #viewerContainer {
       position: absolute;
-      bottom: 0;
       left: 0;
       right: 0;
-      overflow: auto;
+      overflow-x: auto;
       background: #ffffff;
       text-align: center;
-      height: 90vh;
+      height: 95vh;
+      border-bottom: 1px solid black;
     }
     
     #viewer {
       display: inline-block;
-      border: 1px solid black;
-      margin: 30px 10px;
+      border: 2px solid black;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+      border-radius: 10px;
+      margin-top: 5rem;
+      margin-bottom: 7rem;
+    }
+
+    #sliderContainer {
+      position: absolute;
+      top: 3rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 999;
+      background:#c3ff0033; 
+      border-radius: 10px;
+      padding: .2rem .8rem;
+      width: 90%;
+      margin: 0 auto;
+      display: grid;
+      place-items: center;
     }
 
     #prevPage {
@@ -56,10 +80,9 @@
       left: 2rem;
       transform: translateY(-50%);
       z-index: 999;
-      opacity: 0.5;
-      background-color: transparent;
-      border: 1px solid rgb(197, 197, 197);
-      padding: 20px 4px;
+      background-color: white;
+      border: 3px solid rgb(0, 0, 0);
+      padding: 10px 4px;
       cursor: pointer;
     }
 
@@ -69,24 +92,10 @@
       right: 2rem;
       transform: translateY(-50%);
       z-index: 999;
-      opacity: 0.5;
-      background-color: transparent;
-      border: 1px solid rgb(197, 197, 197);
-      padding: 20px 4px;
+      background-color: white;
+      border: 3px solid rgb(0, 0, 0);
+      padding: 10px 4px;
       cursor: pointer;
-    }
-   
-    #sliderContainer {
-      position: sticky;
-      z-index: 999;
-      background:#f9f9f9; 
-      border: 1px solid black;
-      border-radius: 10px;
-      padding: .2rem .8rem;
-      width: 80%;
-      margin: 0 auto;
-      display: grid;
-      place-items: center;
     }
     
     #pageSlider {
@@ -110,5 +119,9 @@
 
       #nextPage {
         right: 0.8rem;
+      }
+
+      #viewerContainer {
+        height: 90vh;
       }
       }
