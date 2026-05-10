@@ -3,7 +3,7 @@
       height: 100%;
       font-family: monospace;
       color: #e8eaed;
-      overflow: hidden;
+      overflow-y: hidden;
     }
     /* Controls bar */
     #controls {
@@ -12,10 +12,12 @@
       gap: .4rem;
       padding: .4rem .8rem;
       background: #000000;
-      position: sticky;
+      position: fixed;
       top: 0;
       z-index: 1000;
+      width: 100%;
     }
+    
     #controls input, #controls select, #controls button {
       background: #0b0d10;
       color: #e8eaed;
@@ -39,39 +41,47 @@
       border: 1px solid red;
     }
     
-    #viewerContainer {
+    _#viewerContainer {
       position: absolute;
-      left: 0;
-      right: 0;
+      width: 100%;
       overflow-x: auto;
+      overflow-y: auto;
       background: #ffffff;
       text-align: center;
       height: 95vh;
-      border-bottom: 1px solid black;
     }
     
+    #viewerContainer {
+      position: fixed;
+      top: 3.4rem;
+      width: 100%;
+      overflow-x: auto;
+      overflow-y: auto;
+      background: #ffffff;
+      text-align: center;
+      height: 94vh;
+    }
+
     #viewer {
       display: inline-block;
-      border: 2px solid black;
-      box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
-      border-radius: 10px;
-      margin-top: 5rem;
+      _border: 2px solid black;
+      _box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+      _border-radius: 10px;
+      margin-top: 8rem;
       margin-bottom: 7rem;
     }
 
     #sliderContainer {
-      position: absolute;
-      top: 3rem;
+      position: fixed;
+      top: 4rem;
       left: 50%;
       transform: translateX(-50%);
       z-index: 999;
-      background:#c3ff0033; 
-      border-radius: 10px;
-      padding: .2rem .8rem;
+      _background: #c3ff0033;
+      padding: 0.5rem;
       width: 90%;
-      margin: 0 auto;
       display: grid;
-      place-items: center;
+      justify-content: right;
     }
 
     /* hide useless first page */
@@ -128,7 +138,11 @@
         right: 0.8rem;
       }
 
-      #viewerContainer {
-        height: 90vh;
+      #viewer {
+        margin-top: 2rem;
+      }
+
+      #sliderContainer {
+        top: 3rem;
       }
       }

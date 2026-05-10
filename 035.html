@@ -8,7 +8,7 @@
 
   <!-- PDF.js base CSS -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf_viewer.min.css" />
-  <link rel="stylesheet" href="t.css" />
+  <link rel="stylesheet" href="pdfstyle2-old.css" />
 </head>
 <body>
   <!-- Controls -->
@@ -23,6 +23,7 @@
     <label style="margin-left:1rem">
       <select id="zoomSelect">
         <option value="0.5">50%</option>
+        <option value="0.75">75%</option>
         <option value="1">100%</option>
         <option value="1.5">150%</option>
         <option value="2">200%</option>
@@ -31,6 +32,10 @@
         <option value="page-height">Fit H</option>
       </select>
     </label>
+
+    <div>
+      <input type="range" id="pageSlider" min="2" max="1" value="2" style="width:6rem">
+    </div>
   </div>
 
   <button id="prevPage">◀</button>
@@ -42,9 +47,6 @@
   </div>
 
   <div id="sliderContainer">
-      <div>
-        <input type="range" id="pageSlider" min="2" max="1" value="2">
-      </div>
       <div>
         <label id="searchlabel" style="margin-left:1rem">
           <input type="text" id="searchInput" placeholder="Search…" style="width:8rem">
