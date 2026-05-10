@@ -71,10 +71,17 @@
      max-width: 300px;
     }
 
+    /* hide useless first page */
+    .pdfViewer .page[data-page-number="1"] {
+      display: none !important;
+    }
+
     #prevPage {
-      position: fixed;
+      display: none;
+      position: absolute;
       top: 50%;
       left: 2rem;
+      transform: translateY(-50%);
       z-index: 999;
       background-color: white;
       border: 3px solid rgb(0, 0, 0);
@@ -83,9 +90,11 @@
     }
 
     #nextPage {
-      position: fixed;
+      display: none;
+      position: absolute;
       top: 50%;
       right: 2rem;
+      transform: translateY(-50%);
       z-index: 999;
       background-color: white;
       border: 3px solid rgb(0, 0, 0);

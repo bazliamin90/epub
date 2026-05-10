@@ -3,7 +3,7 @@
       height: 100%;
       font-family: monospace;
       color: #e8eaed;
-      overflow-y: scroll;
+      overflow: hidden;
     }
     /* Controls bar */
     #controls {
@@ -12,24 +12,10 @@
       gap: .4rem;
       padding: .4rem .8rem;
       background: #000000;
-      position: fixed;
+      position: sticky;
       top: 0;
       z-index: 1000;
-      width: 100%;
     }
-
-    #sliderContainer {
-      position: fixed;
-      top: 2.5rem;
-      z-index: 999;
-      background:#c3ff0033; 
-      padding: 0.5rem;
-      width: 100%;
-      margin: 0 auto;
-      display: grid;
-      justify-content: center;
-    }
-
     #controls input, #controls select, #controls button {
       background: #0b0d10;
       color: #e8eaed;
@@ -46,15 +32,21 @@
       padding: .25rem .6rem;
       font-family: monospace;
     }
+
+    _#bigcontainer {
+      position: relative;
+      height: 80vh;
+      border: 1px solid red;
+    }
     
     #viewerContainer {
       position: absolute;
-      width: 100%;
+      left: 0;
+      right: 0;
       overflow-x: auto;
-      overflow-y: auto;
       background: #ffffff;
       text-align: center;
-      height: auto;
+      height: 95vh;
       border-bottom: 1px solid black;
     }
     
@@ -63,18 +55,30 @@
       border: 2px solid black;
       box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
       border-radius: 10px;
-      margin-top: 8rem;
+      margin-top: 5rem;
       margin-bottom: 7rem;
     }
 
-    .navButtons {
-     max-width: 300px;
+    #sliderContainer {
+      position: absolute;
+      top: 3rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 999;
+      background:#c3ff0033; 
+      border-radius: 10px;
+      padding: .2rem .8rem;
+      width: 90%;
+      margin: 0 auto;
+      display: grid;
+      place-items: center;
     }
 
     #prevPage {
-      position: fixed;
+      position: absolute;
       top: 50%;
       left: 2rem;
+      transform: translateY(-50%);
       z-index: 999;
       background-color: white;
       border: 3px solid rgb(0, 0, 0);
@@ -83,9 +87,10 @@
     }
 
     #nextPage {
-      position: fixed;
+      position: absolute;
       top: 50%;
       right: 2rem;
+      transform: translateY(-50%);
       z-index: 999;
       background-color: white;
       border: 3px solid rgb(0, 0, 0);
@@ -114,5 +119,9 @@
 
       #nextPage {
         right: 0.8rem;
+      }
+
+      #viewerContainer {
+        height: 90vh;
       }
       }
