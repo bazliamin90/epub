@@ -3,61 +3,8 @@
       height: 100%;
       font-family: monospace;
       color: #e8eaed;
-      overflow-y: hidden;
+      overflow-y: scroll;
     }
-
-    #sliderContainer {
-      position: sticky;
-      top: 93%;
-      z-index: 1000;
-      border: 2px solid black;
-      border-radius: 10px;
-      padding: 0.5rem;
-      width: fit-content;
-      display: flex;
-      margin: 0 auto;
-      flex-direction: row;
-      gap: 0.5rem;
-      background: white;
-    }
-
-    #navbar {
-      position: sticky;
-      top: 1rem;
-      z-index: 1000;
-      border: 2px solid black;
-      border-radius: 10px;
-      padding: 0.5rem;
-      width: fit-content;
-      display: flex;
-      margin: 0 auto;
-      flex-direction: row;
-      gap: 0.5rem;
-      background: white;
-    }
-
-    #navbar select {
-      background: #0b0d10;
-      color: #e8eaed;
-      border: 1px solid gray;
-      border-radius: 8px;
-      padding: .25rem;
-      font-family: monospace;
-      cursor: pointer;
-    }
-
-    #pageinput label {
-      background: #0b0d10;
-      color: #e8eaed;
-      border: 1px solid gray;
-      border-radius: 8px;
-      padding: .25rem .6rem;
-    }
-
-    #pageinput span {
-      color: black;
-    }
-
     /* Controls bar */
     #controls {
       display: flex;
@@ -70,7 +17,19 @@
       z-index: 1000;
       width: 100%;
     }
-    
+
+    #sliderContainer {
+      position: fixed;
+      top: 2.5rem;
+      z-index: 999;
+      background:#c3ff0033; 
+      padding: 0.5rem;
+      width: 100%;
+      margin: 0 auto;
+      display: grid;
+      justify-content: center;
+    }
+
     #controls input, #controls select, #controls button {
       background: #0b0d10;
       color: #e8eaed;
@@ -89,26 +48,27 @@
     }
     
     #viewerContainer {
-      position: fixed;
-      top: 0;
+      position: absolute;
       width: 100%;
       overflow-x: auto;
-      overflow-y: scroll;
+      overflow-y: auto;
       background: #ffffff;
       text-align: center;
-      height: 100%;
+      height: auto;
+      border-bottom: 1px solid black;
     }
-
+    
     #viewer {
       display: inline-block;
       border: 2px solid black;
-      _box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
       border-radius: 10px;
-      margin: 2rem auto;
+      margin-top: 8rem;
+      margin-bottom: 7rem;
     }
 
-    #test {
-      border: 2px solid red;
+    .navButtons {
+     max-width: 300px;
     }
 
     /* hide useless first page */
@@ -117,29 +77,27 @@
     }
 
     #prevPage {
-      display: none;
-      position: absolute;
+      position: fixed;
       top: 50%;
       left: 2rem;
-      transform: translateY(-50%);
       z-index: 999;
       background-color: white;
       border: 3px solid rgb(0, 0, 0);
       padding: 10px 4px;
       cursor: pointer;
+      display: none;
     }
 
     #nextPage {
-      display: none;
-      position: absolute;
+      position: fixed;
       top: 50%;
       right: 2rem;
-      transform: translateY(-50%);
       z-index: 999;
       background-color: white;
       border: 3px solid rgb(0, 0, 0);
       padding: 10px 4px;
       cursor: pointer;
+      display: none;
     }
     
     #pageSlider {
@@ -164,12 +122,4 @@
       #nextPage {
         right: 0.8rem;
       }
-
-      #sliderContainer {
-        top: 92%;
       }
-      
-      #navbar {
-        top: 0.5rem;
-      }
-    }
