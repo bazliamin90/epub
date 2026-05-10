@@ -280,6 +280,11 @@ h1 a:hover {
             <li><a href="029.html">Markaz al Salam</a></li>
         </ol>
     </li>
+    <li>Surah 111. Al-masad
+        <ol>
+            <li><a href="038.html">Nouman Ali Khan</a></li>
+        </ol>
+    </li>
     <li>Bazli's tadabbur notes
         <ol>
             <li><a href="035.html">111. Al-masad</a></li>
