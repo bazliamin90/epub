@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Docs-like Viewer</title>
+
+<style>
+
+/* =========================
+BASE
+========================= */
+
+body{
+  margin:0;
+  font-family:Arial;
+  background:#f2f2f2;
+  overflow:hidden;
+}
+
+/* =========================
+NAVBAR
+========================= */
+
+#navbar{
+  position:fixed;
+  top:1rem;
+  left:50%;
+  transform:translateX(-50%);
+  z-index:9999;
+
+  display:flex;
+  gap:.5rem;
+  align-items:center;
+
+  background:white;
+  padding:.7rem 1rem;
+  border-radius:12px;
+  box-shadow:0 2px 10px rgba(0,0,0,.15);
+}
+
+/* =========================
+VIEWER WRAPPER
+========================= */
+
+#viewerContainer{
+  position:absolute;
+  top:4.5rem;
+  left:0;
+  right:0;
+  bottom:0;
+
+  display:flex;
+  justify-content:center;
+  overflow:hidden;
+}
+
+/* =========================
+SCROLL AREA (IMPORTANT)
+========================= */
+
+#scrollArea{
+  width:min(700px,95%);
+  height:95%;
+  overflow:hidden;
+  background:white;
+  box-shadow:0 0 15px rgba(0,0,0,.1);
+  border-radius:12px;
+}
+
+/* iframe inside scroll container */
+#docFrame{
+  width:100%;
+  height:100%;
+  border:none;
+}
+
+/* =========================
+ZOOM EFFECT
+========================= */
+
+.zoomed{
+  transform-origin:top center;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- =========================
+NAVBAR
+========================= -->
+
+<div id="navbar">
+
+  <input
+    type="text"
+    id="searchInput"
+    placeholder="Search..."
+  >
+
+  <button id="findPrev">◀</button>
+  <button id="findNext">▶</button>
+
+  <select id="zoomSelect">
+    <option value="1">100%</option>
+    <option value="1.25">125%</option>
+    <option value="1.5">150%</option>
+    <option value="2">200%</option>
+  </select>
+
+</div>
+
+<!-- =========================
+VIEWER
+========================= -->
+
+<div id="viewerContainer">
+  <div id="scrollArea">
+    <iframe id="docFrame"></iframe>
+  </div>
+</div>
+
+<script>
+
+// =========================
+// DOC CONFIG
+// =========================
+
+const docId =
+  "1r5iPr4PfIN0pkKpObSzJpbST79SclDAmUrGI7MDkW-Y";
+
+// BEST STABLE MODE (NO DOWNLOAD, NO SIGN-IN ISSUE)
+const url =
+  `https://docs.google.com/document/d/${docId}/preview?embedded=true`;
+
+const frame =
+  document.getElementById("docFrame");
+
+frame.src = url;
+
+// =========================
+// ZOOM (VISUAL ONLY)
+// =========================
+
+const scrollArea =
+  document.getElementById("scrollArea");
+
+document
+  .getElementById("zoomSelect")
+  .addEventListener("change", e => {
+
+    const scale =
+      parseFloat(e.target.value);
+
+    scrollArea.style.transform =
+      `scale(${scale})`;
+
+    scrollArea.style.width =
+      `${100 / scale}%`;
+  });
+
+// =========================
+// SEARCH (IFRAME FIND)
+// =========================
+
+function search(dir){
+
+  const query =
+    document.getElementById("searchInput")
+      .value;
+
+  if(!query) return;
+
+  const win =
+    frame.contentWindow;
+
+  // built-in browser iframe search
+  win.find(
+    query,
+    false,
+    dir === "back",
+    true,
+    false,
+    false,
+    false
+  );
+}
+
+document
+  .getElementById("findNext")
+  .onclick = () => search("forward");
+
+document
+  .getElementById("findPrev")
+  .onclick = () => search("back");
+
+document
+  .getElementById("searchInput")
+  .addEventListener("keydown", e => {
+
+    if(e.key === "Enter"){
+      search("forward");
+    }
+
+  });
+
+</script>
+
+</body>
+</html>
