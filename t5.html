@@ -4,19 +4,17 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <script src="header.js"></script>
-<title>Al-masad</title>
+<title>Yusuf</title>
 
 <style>
-
-/* =========================
-BASE
-========================= */
-
 body{
   margin:0;
   font-family:Arial;
   background:#f2f2f2;
   overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  height:100vh;
 }
 
 /* =========================
@@ -24,17 +22,15 @@ NAVBAR
 ========================= */
 
 #navbar{
-  position:fixed;
-  left:50%;
-  transform:translateX(-50%);
-  z-index:999;
   width:100%;
   display:flex;
   gap:.5rem;
   align-items:center;
-  background:white;
-  padding:.7rem 1rem;
+  background:black;
+  padding:.7rem;
   box-shadow:0 0 15px rgba(0,0,0,.1);
+  box-sizing:border-box;
+  z-index:999;
 }
 
 /* =========================
@@ -42,15 +38,11 @@ VIEWER WRAPPER
 ========================= */
 
 #viewerContainer{
-  position:absolute;
-  top:4.5rem;
-  left:0;
-  right:0;
-  bottom:0;
+  flex:1;
   display:flex;
   justify-content:center;
   overflow:hidden;
-  z-index: 1;
+  z-index:1;
 }
 
 /* =========================
@@ -76,19 +68,8 @@ SCROLL AREA (IMPORTANT)
 
 <body>
 
-<!-- =========================
-NAVBAR
-========================= -->
-
 <div id="navbar">
   <header3-component></header3-component>
-  <input
-    type="text"
-    id="searchInput"
-    placeholder="Search..."
->
-  <button id="findPrev">◀</button>
-  <button id="findNext">▶</button>
 </div>
 
 <div id="viewerContainer">
@@ -98,67 +79,17 @@ NAVBAR
 </div>
 
 <script>
-
-// =========================
-// DOC CONFIG
-// =========================
-
 const docId =
   "1yDr5UaqtQgElt5VqvAtCnCviSJGNxDPmWAJnw1lDcnU";
 
 // BEST STABLE MODE (NO DOWNLOAD, NO SIGN-IN ISSUE)
 const url =
-  `https://docs.google.com/document/d/${docId}/preview?embedded=true`;
+  "https://docs.google.com/document/d/1yDr5UaqtQgElt5VqvAtCnCviSJGNxDPmWAJnw1lDcnU/preview?tab=t.v1a3d9mbubpm&embedded=true";
 
 const frame =
   document.getElementById("docFrame");
 
 frame.src = url;
-
-// =========================
-// SEARCH (IFRAME FIND)
-// =========================
-
-function search(dir){
-
-  const query =
-    document.getElementById("searchInput")
-      .value;
-
-  if(!query) return;
-
-  const win =
-    frame.contentWindow;
-
-  // built-in browser iframe search
-  win.find(
-    query,
-    false,
-    dir === "back",
-    true,
-    false,
-    false,
-    false
-  );
-}
-
-document
-  .getElementById("findNext")
-  .onclick = () => search("forward");
-
-document
-  .getElementById("findPrev")
-  .onclick = () => search("back");
-
-document
-  .getElementById("searchInput")
-  .addEventListener("keydown", e => {
-
-    if(e.key === "Enter"){
-      search("forward");
-    }
-
-  });
 
 </script>
 
