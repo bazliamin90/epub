@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
+<script src="header.js"></script>
 <title>Al-masad</title>
 
 <style>
@@ -24,18 +25,15 @@ NAVBAR
 
 #navbar{
   position:fixed;
-  top:1rem;
   left:50%;
   transform:translateX(-50%);
-  z-index:9999;
-  width:max(700px,95%);
+  z-index:999;
+  width:100%;
   display:flex;
   gap:.5rem;
   align-items:center;
-
   background:white;
   padding:.7rem 1rem;
-  border-radius:12px;
   box-shadow:0 0 15px rgba(0,0,0,.1);
 }
 
@@ -49,10 +47,10 @@ VIEWER WRAPPER
   left:0;
   right:0;
   bottom:0;
-
   display:flex;
   justify-content:center;
   overflow:hidden;
+  z-index: 1;
 }
 
 /* =========================
@@ -60,12 +58,11 @@ SCROLL AREA (IMPORTANT)
 ========================= */
 
 #scrollArea{
-  width:max(700px,95%);
-  height:95%;
+  width:100%;
+  height:100%;
   overflow:hidden;
   background:white;
   box-shadow:0 0 15px rgba(0,0,0,.1);
-  border-radius:12px;
 }
 
 /* iframe inside scroll container */
@@ -84,21 +81,15 @@ NAVBAR
 ========================= -->
 
 <div id="navbar">
-
+  <header3-component></header3-component>
   <input
     type="text"
     id="searchInput"
     placeholder="Search..."
-  >
-
+>
   <button id="findPrev">◀</button>
   <button id="findNext">▶</button>
-
 </div>
-
-<!-- =========================
-VIEWER
-========================= -->
 
 <div id="viewerContainer">
   <div id="scrollArea">
@@ -113,7 +104,7 @@ VIEWER
 // =========================
 
 const docId =
-  "1QaLdzYTan6GCSGFvBqWzzJuh2zIkIaxpcpzmrv6i-lc";
+  "1yDr5UaqtQgElt5VqvAtCnCviSJGNxDPmWAJnw1lDcnU";
 
 // BEST STABLE MODE (NO DOWNLOAD, NO SIGN-IN ISSUE)
 const url =
