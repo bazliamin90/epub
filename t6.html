@@ -43,11 +43,27 @@ body{
 /* SIDEBAR (OUTLINE) */
 
 #tabs{
-  width:8rem;
+  position:relative;
+
+  width:240px;
+  min-width:240px;
+
   background:#f7f7f7;
   border-right:1px solid #ddd;
+
   overflow:auto;
   padding:.5rem;
+
+  transition:.25s;
+}
+
+/* collapsed */
+#tabs.collapsed{
+  width:0;
+  min-width:0;
+  padding:0;
+  overflow:hidden;
+  border-right:none;
 }
 
 .tab{
@@ -61,6 +77,10 @@ body{
 
 .tab:hover{
   background:#eef2ff;
+}
+
+#toggleSidebarBtn{
+  cursor:pointer;
 }
 
 /* DOCUMENT */
@@ -93,18 +113,25 @@ mark.active{
 <!-- ================= NAVBAR ================= -->
 <div id="navbar">
   <header3-component></header3-component>
+
   <input id="searchInput" placeholder="Cari..." />
+
   <button id="prevBtn">◀</button>
   <button id="nextBtn">▶</button>
-
+  <button id="toggleSidebarBtn">☰</button>
 </div>
 
 <!-- ================= MAIN ================= -->
 <div id="container">
-  <div id="tabs"></div>
+
+  <!-- SIDEBAR -->
+  <div id="tabs" class="collapsed"></div>
+
+  <!-- DOCUMENT -->
   <div id="docWrapper">
     <div id="doc"></div>
   </div>
+
 </div>
 
 <script>
@@ -354,6 +381,21 @@ document
 
 document.getElementById("nextBtn").onclick = next;
 document.getElementById("prevBtn").onclick = prev;
+
+// =====================================================
+// SIDEBAR TOGGLE
+// =====================================================
+
+const tabs =
+  document.getElementById("tabs");
+
+document
+  .getElementById("toggleSidebarBtn")
+  .onclick = () => {
+
+    tabs.classList.toggle("collapsed");
+
+  };
 
 </script>
 
