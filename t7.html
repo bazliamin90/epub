@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <script src="header.js"></script>
-<title>Yusuf, 12: 47-50</title>
+<title>092. Al-layl</title>
 
 <style>
 
@@ -30,6 +30,7 @@ body{
 }
 
 #searchInput{
+  width: 100px;
 }
 
 /* ================= LAYOUT ================= */
@@ -38,16 +39,32 @@ body{
   flex:1;
   display:flex;
   overflow:hidden;
+  position:relative;
 }
 
 /* SIDEBAR (OUTLINE) */
 
 #tabs{
-  width:240px;
+  width:8rem;
   background:#f7f7f7;
   border-right:1px solid #ddd;
   overflow:auto;
   padding:.5rem;
+
+  position:absolute;
+  top:0;
+  left:0;
+  bottom:0;
+
+  transform:translateY(-100%);
+  transition:transform .35s ease;
+
+  z-index:900;
+}
+
+/* visible state */
+#tabs.show{
+  transform:translateY(0);
 }
 
 .tab{
@@ -76,7 +93,7 @@ body{
 /* HIGHLIGHT */
 
 mark{
-  background:yellow;
+  background:rgba(0, 255, 0, 0.475);
   padding:0;
 }
 
@@ -94,9 +111,10 @@ mark.active{
 <div id="navbar">
   <header3-component></header3-component>
   <input id="searchInput" placeholder="Cari..." />
+  <button id="clearSearchBtn">✕</button>
   <button id="prevBtn">◀</button>
   <button id="nextBtn">▶</button>
-
+  <button id="toggleTabsBtn">Tab</button>
 </div>
 
 <!-- ================= MAIN ================= -->
@@ -114,7 +132,7 @@ mark.active{
 // =====================================================
 
 const docId =
-  "1uBqoIKAVZTaQH8atsiBR5cr1R82ovzdHimduuFY-etk";
+  "1uEPqXShD2-D5SuFfvhId-Ps4GTzVvt5d0--7dXDwqrg";
 
 // IMPORTANT: we still use your tab link only as reference,
 // but real rendering uses export HTML (required)
@@ -355,6 +373,37 @@ document
 document.getElementById("nextBtn").onclick = next;
 document.getElementById("prevBtn").onclick = prev;
 
+// =====================================================
+// 10. TOGGLE TABS
+// =====================================================
+
+const toggleTabsBtn =
+  document.getElementById("toggleTabsBtn");
+
+const tabs =
+  document.getElementById("tabs");
+
+toggleTabsBtn.onclick = () => {
+
+  tabs.classList.toggle("show");
+
+};
+
+// =====================================================
+// 11. CLEAR SEARCH
+// =====================================================
+
+document
+  .getElementById("clearSearchBtn")
+  .onclick = () => {
+
+    document
+      .getElementById("searchInput")
+      .value = "";
+
+    clearHighlights();
+
+  };
 </script>
 
 </body>
