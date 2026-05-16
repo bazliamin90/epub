@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<script src="header.js"></script>
+<title>092. Al-layl</title>
+
+<style>
+
+body{
+  margin:0;
+  font-family:Arial;
+  height:100vh;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+}
+
+/* ================= NAVBAR ================= */
+
+#navbar{
+  display:flex;
+  gap:.5rem;
+  align-items:center;
+  padding:.7rem 1rem;
+  background:white;
+  box-shadow:0 0 15px rgba(0,0,0,.1);
+  border-bottom:1px solid black;
+
+  position:sticky;
+  top:0;
+  z-index:2000;
+
+  flex-shrink:0;
+}
+
+#footbar{
+  padding:.7rem 1rem;
+  background:white;
+  border-top:1px solid black;
+  box-shadow:0 0 15px rgba(0,0,0,.08);
+
+  display:flex;
+  align-items:center;
+  gap:.5rem;
+
+  z-index:1000;
+}
+
+#searchInput{
+  width: 100px;
+}
+
+/* ================= LAYOUT ================= */
+
+#container{
+  flex:1;
+  display:flex;
+  overflow:hidden;
+
+  min-height:0;
+  position:relative;
+}
+
+/* SIDEBAR (OUTLINE) */
+
+#tabs{
+  width:8rem;
+  background:#f7f7f7;
+  border-right:1px solid #ddd;
+  overflow:auto;
+  padding:.5rem;
+
+  position:absolute;
+  top:0;
+  left:0;
+  bottom:0;
+
+  transform:translateY(-100%);
+  transition:transform .35s ease;
+
+  z-index:900;
+}
+
+/* visible state */
+#tabs.show{
+  transform:translateY(0);
+}
+
+.tab{
+  padding:.5rem;
+  margin-bottom:.3rem;
+  background:white;
+  border-radius:6px;
+  cursor:pointer;
+  font-size:14px;
+}
+
+.tab:hover{
+  background:#eef2ff;
+}
+
+/* DOCUMENT */
+
+#docWrapper{
+  flex:1;
+  overflow:auto;
+  padding:2rem;
+  background:white;
+  line-height:1.6;
+
+  min-height:0;
+}
+
+/* HIGHLIGHT */
+
+mark{
+  background:rgba(0, 255, 0, 0.475);
+  padding:0;
+}
+
+/* active match */
+mark.active{
+  background:orange;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- ================= NAVBAR ================= -->
+<div id="navbar">
+  <header3-component></header3-component>
+  <input id="searchInput" placeholder="Cari..." />
+  <button id="clearSearchBtn">✕</button>
+  <button id="prevBtn">◀</button>
+  <button id="nextBtn">▶</button>
+  <button id="toggleTabsBtn">Tab</button>
+</div>
+
+<!-- ================= MAIN ================= -->
+<div id="container">
+  <div id="tabs"></div>
+  <div id="docWrapper">
+    <div id="doc"></div>
+  </div>
+</div>
+
+<div id="footbar">
+  Footbar
+</div>
+
+<script>
+
+// =====================================================
+// 1. GOOGLE DOC SOURCE (YOUR LINK → EXPORT MODE)
+// =====================================================
+
+const docId =
+  "1uEPqXShD2-D5SuFfvhId-Ps4GTzVvt5d0--7dXDwqrg";
+
+// IMPORTANT: we still use your tab link only as reference,
+// but real rendering uses export HTML (required)
+const sourceUrl =
+  `https://docs.google.com/document/d/${docId}/export?format=html`;
+
+// =====================================================
+// 2. STATE ENGINE
+// =====================================================
+
+let docRoot;
+let matches = [];
+let currentIndex = -1;
+
+// =====================================================
+// 3. LOAD DOC
+// =====================================================
+
+fetch(sourceUrl)
+  .then(r => r.text())
+  .then(html => {
+
+    const container =
+      document.getElementById("doc");
+
+    container.innerHTML = html;
+
+    docRoot = container;
+
+    buildOutline();
+
+  });
+
+// =====================================================
+// 4. BUILD SIDEBAR OUTLINE (TABS REPLACEMENT)
+// =====================================================
+
+function buildOutline(){
+
+  const tabs =
+    document.getElementById("tabs");
+
+  const headings =
+    docRoot.querySelectorAll("h1, h2, h3");
+
+  headings.forEach((h, i) => {
+
+    const div =
+      document.createElement("div");
+
+    div.className = "tab";
+
+    div.textContent =
+      h.textContent || `Section ${i+1}`;
+
+    div.onclick = () => {
+
+      h.scrollIntoView({
+        behavior:"smooth",
+        block:"start"
+      });
+
+    };
+
+    tabs.appendChild(div);
+
+  });
+
+}
+
+// =====================================================
+// 5. SAFE TEXT NODE WALK SEARCH (NO HTML DESTRUCTION)
+// =====================================================
+
+function getTextNodes(root){
+
+  const walker =
+    document.createTreeWalker(
+      root,
+      NodeFilter.SHOW_TEXT,
+      null
+    );
+
+  const nodes = [];
+  let n;
+
+  while(n = walker.nextNode()){
+    if(n.nodeValue.trim()){
+      nodes.push(n);
+    }
+  }
+
+  return nodes;
+
+}
+
+// =====================================================
+// 6. CLEAR HIGHLIGHTS
+// =====================================================
+
+function clearHighlights(){
+
+  const marks =
+    docRoot.querySelectorAll("mark");
+
+  marks.forEach(m => {
+
+    const parent =
+      m.parentNode;
+
+    parent.replaceChild(
+      document.createTextNode(m.textContent),
+      m
+    );
+
+    parent.normalize();
+
+  });
+
+  matches = [];
+  currentIndex = -1;
+
+}
+
+// =====================================================
+// 7. SEARCH ENGINE (PRO VERSION)
+// =====================================================
+
+function search(){
+
+  clearHighlights();
+
+  const query =
+    document.getElementById("searchInput").value;
+
+  if(!query) return;
+
+  const regex =
+    new RegExp(query, "gi");
+
+  const nodes =
+    getTextNodes(docRoot);
+
+  nodes.forEach(node => {
+
+    const text =
+      node.nodeValue;
+
+    if(!regex.test(text)) return;
+
+    const span =
+      document.createElement("span");
+
+    span.innerHTML =
+      text.replace(regex, m =>
+        `<mark>${m}</mark>`
+      );
+
+    node.replaceWith(span);
+
+  });
+
+  matches =
+    Array.from(docRoot.querySelectorAll("mark"));
+
+  currentIndex = -1;
+
+}
+
+// =====================================================
+// 8. NAVIGATION
+// =====================================================
+
+function goTo(index){
+
+  if(matches.length === 0) return;
+
+  const el =
+    matches[index];
+
+  if(!el) return;
+
+  matches.forEach(m => m.classList.remove("active"));
+
+  el.classList.add("active");
+
+  el.scrollIntoView({
+    behavior:"smooth",
+    block:"center"
+  });
+
+}
+
+// next
+function next(){
+
+  if(matches.length === 0) search();
+
+  if(matches.length === 0) return;
+
+  currentIndex =
+    (currentIndex + 1) % matches.length;
+
+  goTo(currentIndex);
+
+}
+
+// prev
+function prev(){
+
+  if(matches.length === 0) search();
+
+  if(matches.length === 0) return;
+
+  currentIndex =
+    (currentIndex - 1 + matches.length)
+    % matches.length;
+
+  goTo(currentIndex);
+
+}
+
+// =====================================================
+// 9. EVENTS
+// =====================================================
+
+document
+  .getElementById("searchInput")
+  .addEventListener("keydown", e => {
+
+    if(e.key === "Enter"){
+      search();
+      next();
+    }
+
+  });
+
+document.getElementById("nextBtn").onclick = next;
+document.getElementById("prevBtn").onclick = prev;
+
+// =====================================================
+// 10. TOGGLE TABS
+// =====================================================
+
+const toggleTabsBtn =
+  document.getElementById("toggleTabsBtn");
+
+const tabs =
+  document.getElementById("tabs");
+
+toggleTabsBtn.onclick = () => {
+
+  tabs.classList.toggle("show");
+
+};
+
+// =====================================================
+// 11. CLEAR SEARCH
+// =====================================================
+
+document
+  .getElementById("clearSearchBtn")
+  .onclick = () => {
+
+    document
+      .getElementById("searchInput")
+      .value = "";
+
+    clearHighlights();
+
+  };
+</script>
+
+</body>
+</html>
