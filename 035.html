@@ -1,544 +1,481 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <script src="header.js"></script>
-  <title>Al-masad</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<script src="header.js"></script>
+<title>111. Al-masad</title>
 
-  <!-- PDF.js base CSS -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf_viewer.min.css" />
-  <link rel="stylesheet" href="pdfstyle2-old.css" />
+<style>
+
+body{
+  margin:0;
+  font-family:Arial;
+  height:100dvh;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+  background-color: tan;
+}
+
+/* ================= NAVBAR ================= */
+
+#navbar{
+  display:flex;
+  gap:.5rem;
+  align-items:center;
+  padding:.7rem 1rem;
+  background:white;
+  box-shadow:0 0 15px rgba(0,0,0,.1);
+  border-bottom:1px solid black;
+
+  position:sticky;
+  top:0;
+  z-index:2000;
+
+  flex-shrink:0;
+}
+
+#footbar{
+  padding:.3rem 1rem;
+  background:white;
+  border-top:1px solid black;
+  box-shadow:0 0 15px rgba(0,0,0,.08);
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  gap:.5rem;
+
+  position:sticky;
+  bottom:0;
+  z-index:1000;
+}
+
+#searchInput{
+  width: 100px;
+}
+
+/* ================= LAYOUT ================= */
+
+#container{
+  flex:1;
+  display:flex;
+  overflow:hidden;
+  position:relative;
+
+  min-height:0;
+}
+
+/* SIDEBAR (OUTLINE) */
+
+#tabs{
+  width:8rem;
+  background:#f7f7f7;
+  border-right:1px solid #ddd;
+  overflow:auto;
+  padding:.5rem;
+
+  position:absolute;
+  top:0;
+  left:0;
+
+  transform:translateY(-100%);
+  transition:transform .35s ease;
+
+  z-index:900;
+}
+
+/* visible state */
+#tabs.show{
+  transform:translateY(0);
+}
+
+.tab{
+  padding:.5rem;
+  margin-bottom:.3rem;
+  background:white;
+  border-radius:6px;
+  cursor:pointer;
+  font-size:14px;
+}
+
+.tab:hover{
+  background:#eef2ff;
+}
+
+/* DOCUMENT */
+
+#docWrapper{
+  flex:1;
+  overflow:auto;
+
+  margin-top: 0.3rem;
+  margin-bottom: 0.3rem; ;
+  padding:2rem;
+
+  background:white;
+  border:1px solid #ccc;
+  box-sizing:border-box;
+
+  line-height:1.6;
+  min-height:0;
+
+  scroll-behavior:smooth;
+}
+
+/* HIGHLIGHT */
+
+mark{
+  background:rgba(0, 255, 0, 0.475);
+  padding:0;
+}
+
+/* active match */
+mark.active{
+  background:orange;
+}
+
+#topBtn{
+  padding:.4rem .8rem;
+  border:1px solid #ccc;
+  background:#fff;
+  border-radius:999px;
+  cursor:pointer;
+  font-size:14px;
+  transition:all .2s ease;
+}
+
+#topBtn:hover{
+  background:#f3f3f3;
+  border-color:#999;
+}
+
+#topBtn:active{
+  transform:scale(0.97);
+}
+</style>
 </head>
+
 <body>
-  <!-- Controls -->
-  <div id="controls">
-    <header3-component></header3-component>
 
-    <label>
-      <input type="number" id="pageInput" value="1" min="1" style="width:4rem">
-    </label>
-    <span id="pageCount">/--</span>
+<!-- ================= NAVBAR ================= -->
+<div id="navbar">
+  <header3-component></header3-component>
+  <input id="searchInput" placeholder="Cari..." />
+  <button id="clearSearchBtn">✕</button>
+  <button id="prevBtn">◀</button>
+  <button id="nextBtn">▶</button>
+  <button id="toggleTabsBtn">Tab</button>
+</div>
 
-    <label style="margin-left:1rem">
-      <select id="zoomSelect">
-        <option value="0.5">50%</option>
-        <option value="0.75">75%</option>
-        <option value="1">100%</option>
-        <option value="1.5">150%</option>
-        <option value="2">200%</option>
-        <option value="3">300%</option>
-        <option value="page-width">Fit W</option>
-        <option value="page-height">Fit H</option>
-      </select>
-    </label>
-
-    <div>
-      <input type="range" id="pageSlider" min="2" max="1" value="2" style="width:6rem">
-    </div>
+<!-- ================= MAIN ================= -->
+<div id="container">
+  <div id="tabs"></div>
+  <div id="docWrapper">
+    <div id="doc"></div>
   </div>
+</div>
 
-  <button id="prevPage">◀</button>
-  <button id="nextPage">▶</button>
+<div id="footbar">
+  <button id="topBtn">↑ Top</button>
+</div>
 
-  <!-- PDF container -->
-  <div id="viewerContainer">
-    <div id="viewer" class="pdfViewer"></div>
-  </div>
+<script>
 
-  <div id="sliderContainer">
-      <div>
-        <label id="searchlabel" style="margin-left:1rem">
-          <input type="text" id="searchInput" placeholder="Search…" style="width:8rem">
-          <button id="findPrev">◀</button>
-          <button id="findNext">▶</button>
-          <button id="findReset">✖</button>
-        </label>
-      </div>
-  </div>
+// =====================================================
+// 1. GOOGLE DOC SOURCE (YOUR LINK → EXPORT MODE)
+// =====================================================
 
-  <!-- PDF.js scripts -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf_viewer.min.js"></script>
-  <script>
+const docId =
+  "1r5iPr4PfIN0pkKpObSzJpbST79SclDAmUrGI7MDkW-Y";
 
-  // =========================
-  // DISABLE AUTO RESTORE SCROLL
-  // =========================
+// IMPORTANT: we still use your tab link only as reference,
+// but real rendering uses export HTML (required)
+const sourceUrl =
+  `https://docs.google.com/document/d/${docId}/export?format=html`;
 
-  if ("scrollRestoration" in history) {
-    history.scrollRestoration = "manual";
-  }
+// =====================================================
+// 2. STATE ENGINE
+// =====================================================
 
-  // Force top immediately
-  document.documentElement.scrollTop = 0;
-  document.body.scrollTop = 0;
+let docRoot;
+let matches = [];
+let currentIndex = -1;
 
-  // =========================
-  // PDF.JS WORKER
-  // =========================
+// =====================================================
+// 3. LOAD DOC
+// =====================================================
 
-  pdfjsLib.GlobalWorkerOptions.workerSrc =
-    "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+fetch(sourceUrl)
+  .then(r => r.text())
+  .then(html => {
 
-  // =========================
-  // ELEMENTS
-  // =========================
+    const container =
+      document.getElementById("doc");
 
-  const container =
-    document.getElementById("viewerContainer");
+    container.innerHTML = html;
 
-  const pageInput =
-    document.getElementById("pageInput");
+    docRoot = container;
 
-  const pageCount =
-    document.getElementById("pageCount");
-
-  const pageSlider =
-    document.getElementById("pageSlider");
-
-  const zoomSelect =
-    document.getElementById("zoomSelect");
-
-  const searchInput =
-    document.getElementById("searchInput");
-
-  const findPrevBtn =
-    document.getElementById("findPrev");
-
-  const findNextBtn =
-    document.getElementById("findNext");
-
-  const resetBtn =
-    document.getElementById("findReset");
-
-  // =========================
-  // PDF.JS CORE
-  // =========================
-
-  const eventBus =
-    new pdfjsViewer.EventBus();
-
-  const linkService =
-    new pdfjsViewer.PDFLinkService({
-      eventBus
-    });
-
-  const findController =
-    new pdfjsViewer.PDFFindController({
-      eventBus,
-      linkService
-    });
-
-  const viewer =
-    new pdfjsViewer.PDFViewer({
-      container,
-      eventBus,
-      linkService,
-      findController,
-      textLayerMode: 2,
-    });
-
-  linkService.setViewer(viewer);
-
-  let pdfDoc = null;
-
-  // =========================
-  // STORAGE KEYS
-  // =========================
-
-  const pageKey =
-    location.pathname
-      .split("/")
-      .pop()
-      .replace(/\.[^/.]+$/, "");
-
-  const lastPageKey =
-    pageKey + "_lastPage";
-
-  const lastZoomKey =
-    pageKey + "_lastZoom";
-
-  // =========================
-  // GO TO PAGE
-  // =========================
-
-  function goToPage(page, smooth = true) {
-
-    if (
-      !pdfDoc ||
-      page < 2 ||
-      page > pdfDoc.numPages
-    ) return;
-
-    viewer.currentPageNumber = page;
-
-    const pageView =
-      viewer.getPageView(page - 1);
-
-    if (pageView?.div) {
-
-      pageView.div.scrollIntoView({
-        behavior: smooth
-          ? "smooth"
-          : "instant",
-        block: "start"
-      });
-    }
-
-    pageInput.value = page;
-    pageSlider.value = page;
-
-    localStorage.setItem(
-      lastPageKey,
-      page
-    );
-  }
-
-  // =========================
-  // PDF INITIALIZED
-  // =========================
-
-  eventBus.on("pagesinit", () => {
-
-    // Prevent downward jump
-    container.scrollTop = 0;
-
-    // Restore zoom
-    let savedZoom =
-      localStorage.getItem(lastZoomKey);
-
-    if (savedZoom) {
-
-      viewer.currentScaleValue =
-        savedZoom;
-
-      zoomSelect.value =
-        savedZoom;
-
-    } else {
-
-      viewer.currentScaleValue =
-        window.innerWidth < 768
-          ? "page-width"
-          : "auto";
-    }
-
-    // Setup page counts
-    pageCount.textContent =
-      "/" + pdfDoc.numPages;
-
-    pageInput.min = 2;
-    pageInput.max = pdfDoc.numPages;
-
-    pageSlider.min = 2;
-    pageSlider.max = pdfDoc.numPages;
-
-    // Restore last page
-    let savedPage = parseInt(
-      localStorage.getItem(lastPageKey),
-      10
-    );
-
-    if (
-      savedPage &&
-      savedPage >= 2 &&
-      savedPage <= pdfDoc.numPages
-    ) {
-
-      setTimeout(() => {
-        goToPage(savedPage, false);
-      }, 100);
-
-    } else {
-
-      setTimeout(() => {
-        goToPage(2, false);
-      }, 100);
-    }
-  });
-
-  // =========================
-  // PAGE CHANGING
-  // =========================
-
-  eventBus.on("pagechanging", (e) => {
-
-    if (e.pageNumber < 2) return;
-
-    pageInput.value =
-      e.pageNumber;
-
-    pageSlider.value =
-      e.pageNumber;
-
-    localStorage.setItem(
-      lastPageKey,
-      e.pageNumber
-    );
-  });
-
-  // =========================
-  // SEARCH AUTO SCROLL FIX
-  // =========================
-
-  eventBus.on("updatefindmatchescount", () => {
-
-    setTimeout(() => {
-
-      const selected =
-        document.querySelector(
-          ".highlight.selected"
-        );
-
-      if (selected) {
-
-        selected.scrollIntoView({
-          behavior: "smooth",
-          block: "center"
-        });
-      }
-
-    }, 100);
+    buildOutline();
 
   });
 
-  // =========================
-  // OPEN PDF
-  // =========================
+// =====================================================
+// 4. BUILD SIDEBAR OUTLINE (TABS REPLACEMENT)
+// =====================================================
 
-  async function openPDF(url) {
+function buildOutline(){
 
-    const loadingTask =
-      pdfjsLib.getDocument(url);
+  const tabs =
+    document.getElementById("tabs");
 
-    pdfDoc =
-      await loadingTask.promise;
+  const headings =
+    docRoot.querySelectorAll("h1, h2, h3");
 
-    viewer.setDocument(pdfDoc);
+  headings.forEach((h, i) => {
 
-    linkService.setDocument(
-      pdfDoc,
+    const div =
+      document.createElement("div");
+
+    div.className = "tab";
+
+    div.textContent =
+      h.textContent || `Section ${i+1}`;
+
+    div.onclick = () => {
+
+      const wrapper =
+  document.getElementById("docWrapper");
+
+wrapper.scrollTo({
+  top:
+    h.offsetTop - 20,
+  behavior:"smooth"
+});
+
+    };
+
+    tabs.appendChild(div);
+
+  });
+
+}
+
+// =====================================================
+// 5. SAFE TEXT NODE WALK SEARCH (NO HTML DESTRUCTION)
+// =====================================================
+
+function getTextNodes(root){
+
+  const walker =
+    document.createTreeWalker(
+      root,
+      NodeFilter.SHOW_TEXT,
       null
     );
+
+  const nodes = [];
+  let n;
+
+  while(n = walker.nextNode()){
+    if(n.nodeValue.trim()){
+      nodes.push(n);
+    }
   }
 
-  // =========================
-  // GOOGLE DOC → PDF
-  // =========================
+  return nodes;
 
-  const docId =
-    "1r5iPr4PfIN0pkKpObSzJpbST79SclDAmUrGI7MDkW-Y";
+}
 
-  const pdfUrl =
-    `https://docs.google.com/document/d/${docId}/export?format=pdf`;
+// =====================================================
+// 6. CLEAR HIGHLIGHTS
+// =====================================================
 
-  openPDF(pdfUrl);
+function clearHighlights(){
 
-  // =========================
-  // PAGE INPUT
-  // =========================
+  const marks =
+    docRoot.querySelectorAll("mark");
 
-  pageInput.addEventListener(
-    "change",
-    (e) => {
+  marks.forEach(m => {
 
-      let page =
-        parseInt(e.target.value, 10);
+    const parent =
+      m.parentNode;
 
-      goToPage(page);
-    }
-  );
+    parent.replaceChild(
+      document.createTextNode(m.textContent),
+      m
+    );
 
-  // =========================
-  // PREV BUTTON
-  // =========================
+    parent.normalize();
 
-  document
-    .getElementById("prevPage")
-    .addEventListener("click", () => {
+  });
 
-      goToPage(
-        viewer.currentPageNumber - 1
+  matches = [];
+  currentIndex = -1;
+
+}
+
+// =====================================================
+// 7. SEARCH ENGINE (PRO VERSION)
+// =====================================================
+
+function search(){
+
+  clearHighlights();
+
+  const query =
+    document.getElementById("searchInput").value;
+
+  if(!query) return;
+
+  const regex =
+    new RegExp(query, "gi");
+
+  const nodes =
+    getTextNodes(docRoot);
+
+  nodes.forEach(node => {
+
+    const text =
+      node.nodeValue;
+
+    if(!regex.test(text)) return;
+
+    const span =
+      document.createElement("span");
+
+    span.innerHTML =
+      text.replace(regex, m =>
+        `<mark>${m}</mark>`
       );
-    });
 
-  // =========================
-  // NEXT BUTTON
-  // =========================
+    node.replaceWith(span);
 
-  document
-    .getElementById("nextPage")
-    .addEventListener("click", () => {
+  });
 
-      goToPage(
-        viewer.currentPageNumber + 1
-      );
-    });
+  matches =
+    Array.from(docRoot.querySelectorAll("mark"));
 
-  // =========================
-  // SLIDER NAVIGATION
-  // =========================
+  currentIndex = -1;
 
-  pageSlider.addEventListener(
-    "input",
-    (e) => {
+}
 
-      let page =
-        parseInt(e.target.value, 10);
+// =====================================================
+// 8. NAVIGATION
+// =====================================================
 
-      goToPage(page);
+function goTo(index){
+
+  if(matches.length === 0) return;
+
+  const el =
+    matches[index];
+
+  if(!el) return;
+
+  matches.forEach(m => m.classList.remove("active"));
+
+  el.classList.add("active");
+
+  el.scrollIntoView({
+    behavior:"smooth",
+    block:"center"
+  });
+
+}
+
+// next
+function next(){
+
+  if(matches.length === 0) search();
+
+  if(matches.length === 0) return;
+
+  currentIndex =
+    (currentIndex + 1) % matches.length;
+
+  goTo(currentIndex);
+
+}
+
+// prev
+function prev(){
+
+  if(matches.length === 0) search();
+
+  if(matches.length === 0) return;
+
+  currentIndex =
+    (currentIndex - 1 + matches.length)
+    % matches.length;
+
+  goTo(currentIndex);
+
+}
+
+// =====================================================
+// 9. EVENTS
+// =====================================================
+
+document
+  .getElementById("searchInput")
+  .addEventListener("keydown", e => {
+
+    if(e.key === "Enter"){
+      search();
+      next();
     }
-  );
 
-  // =========================
-  // ZOOM CONTROL
-  // =========================
+  });
 
-  zoomSelect.addEventListener(
-    "change",
-    (e) => {
+document.getElementById("nextBtn").onclick = next;
+document.getElementById("prevBtn").onclick = prev;
 
-      viewer.currentScaleValue =
-        e.target.value;
+// =====================================================
+// 10. TOGGLE TABS
+// =====================================================
 
-      localStorage.setItem(
-        lastZoomKey,
-        e.target.value
-      );
-    }
-  );
+const toggleTabsBtn =
+  document.getElementById("toggleTabsBtn");
 
-  // =========================
-  // KEYBOARD SHORTCUTS
-  // =========================
+const tabs =
+  document.getElementById("tabs");
 
-  document.addEventListener(
-    "keydown",
-    (e) => {
+toggleTabsBtn.onclick = () => {
 
-      if (!pdfDoc) return;
+  tabs.classList.toggle("show");
 
-      switch (e.key) {
+};
 
-        case "ArrowLeft":
+// =====================================================
+// 11. CLEAR SEARCH
+// =====================================================
 
-          goToPage(
-            viewer.currentPageNumber - 1
-          );
+document
+  .getElementById("clearSearchBtn")
+  .onclick = () => {
 
-          break;
+    document
+      .getElementById("searchInput")
+      .value = "";
 
-        case "ArrowRight":
+    clearHighlights();
 
-          goToPage(
-            viewer.currentPageNumber + 1
-          );
+  };
 
-          break;
-
-        case "+":
-        case "=": {
-
-          let newScale =
-            viewer.currentScale + 0.25;
-
-          if (newScale <= 3) {
-
-            viewer.currentScale =
-              newScale;
-
-            localStorage.setItem(
-              lastZoomKey,
-              viewer.currentScale
-            );
-          }
-
-          break;
-        }
-
-        case "-": {
-
-          let newScale =
-            viewer.currentScale - 0.25;
-
-          if (newScale >= 0.5) {
-
-            viewer.currentScale =
-              newScale;
-
-            localStorage.setItem(
-              lastZoomKey,
-              viewer.currentScale
-            );
-          }
-
-          break;
-        }
-      }
-    }
-  );
-
-  // =========================
-  // SEARCH
-  // =========================
-
-  function doSearch(forward = true) {
-
-    const query =
-      searchInput.value.trim();
-
-    if (!query) return;
-
-    eventBus.dispatch("find", {
-      source: window,
-      type: "again",
-      query,
-      caseSensitive: false,
-      highlightAll: true,
-      findPrevious: !forward,
-    });
-  }
-
-  findNextBtn.addEventListener(
-    "click",
-    () => doSearch(true)
-  );
-
-  findPrevBtn.addEventListener(
-    "click",
-    () => doSearch(false)
-  );
-
-  searchInput.addEventListener(
-    "keydown",
-    (e) => {
-
-      if (e.key === "Enter") {
-        doSearch(true);
-      }
-    }
-  );
-
-  // =========================
-  // RESET SEARCH
-  // =========================
-
-  resetBtn.addEventListener(
-    "click",
-    () => {
-
-      searchInput.value = "";
-
-      eventBus.dispatch("find", {
-        source: window,
-        type: "",
-        query: "",
-        highlightAll: false,
-      });
-    }
-  );
-
+// =====================================================
+// 12. SCROLL TO TOP
+// =====================================================
+document.getElementById("topBtn").onclick = () => {
+  document.getElementById("docWrapper").scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+};
 </script>
+
 </body>
 </html>

@@ -4,17 +4,18 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <script src="header.js"></script>
-<title>092. Al-layl</title>
+<title>92. Al-layl</title>
 
 <style>
 
 body{
   margin:0;
   font-family:Arial;
-  height:100vh;
+  height:100dvh;
   display:flex;
   flex-direction:column;
   overflow:hidden;
+  background-color: tan;
 }
 
 /* ================= NAVBAR ================= */
@@ -26,7 +27,30 @@ body{
   padding:.7rem 1rem;
   background:white;
   box-shadow:0 0 15px rgba(0,0,0,.1);
-  border-bottom: 1px solid black;
+  border-bottom:1px solid black;
+
+  position:sticky;
+  top:0;
+  z-index:2000;
+
+  flex-shrink:0;
+}
+
+#footbar{
+  padding:.3rem 1rem;
+  background:white;
+  border-top:1px solid black;
+  box-shadow:0 0 15px rgba(0,0,0,.08);
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  gap:.5rem;
+
+  position:sticky;
+  bottom:0;
+  z-index:1000;
 }
 
 #searchInput{
@@ -40,6 +64,8 @@ body{
   display:flex;
   overflow:hidden;
   position:relative;
+
+  min-height:0;
 }
 
 /* SIDEBAR (OUTLINE) */
@@ -54,7 +80,6 @@ body{
   position:absolute;
   top:0;
   left:0;
-  bottom:0;
 
   transform:translateY(-100%);
   transition:transform .35s ease;
@@ -85,9 +110,19 @@ body{
 #docWrapper{
   flex:1;
   overflow:auto;
+
+  margin-top: 0.3rem;
+  margin-bottom: 0.3rem; ;
   padding:2rem;
+
   background:white;
+  border:1px solid #ccc;
+  box-sizing:border-box;
+
   line-height:1.6;
+  min-height:0;
+
+  scroll-behavior:smooth;
 }
 
 /* HIGHLIGHT */
@@ -100,6 +135,25 @@ mark{
 /* active match */
 mark.active{
   background:orange;
+}
+
+#topBtn{
+  padding:.4rem .8rem;
+  border:1px solid #ccc;
+  background:#fff;
+  border-radius:999px;
+  cursor:pointer;
+  font-size:14px;
+  transition:all .2s ease;
+}
+
+#topBtn:hover{
+  background:#f3f3f3;
+  border-color:#999;
+}
+
+#topBtn:active{
+  transform:scale(0.97);
 }
 
 </style>
@@ -123,6 +177,10 @@ mark.active{
   <div id="docWrapper">
     <div id="doc"></div>
   </div>
+</div>
+
+<div id="footbar">
+  <button id="topBtn">↑ Top</button>
 </div>
 
 <script>
@@ -190,10 +248,14 @@ function buildOutline(){
 
     div.onclick = () => {
 
-      h.scrollIntoView({
-        behavior:"smooth",
-        block:"start"
-      });
+      const wrapper =
+  document.getElementById("docWrapper");
+
+wrapper.scrollTo({
+  top:
+    h.offsetTop - 20,
+  behavior:"smooth"
+});
 
     };
 
@@ -404,6 +466,16 @@ document
     clearHighlights();
 
   };
+
+// =====================================================
+// 12. SCROLL TO TOP
+// =====================================================
+document.getElementById("topBtn").onclick = () => {
+  document.getElementById("docWrapper").scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+};
 </script>
 
 </body>
