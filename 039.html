@@ -24,7 +24,7 @@ body{
   display:flex;
   gap:.5rem;
   align-items:center;
-  padding:.7rem 1rem;
+  padding:.3rem 1rem;
   background:white;
   box-shadow:0 0 15px rgba(0,0,0,.1);
   border-bottom:1px solid black;
@@ -55,6 +55,10 @@ body{
 
 #searchInput{
   width: 100px;
+  padding:.2rem .6rem;
+  border:1px solid #ccc;
+  border-radius:8px;
+  font-size:14px;
 }
 
 /* ================= LAYOUT ================= */
@@ -137,17 +141,17 @@ mark.active{
   background:orange;
 }
 
-#topBtn{
-  padding:.4rem .8rem;
+#topBtn, #toggleTabsBtn, #prevBtn, #nextBtn, #clearSearchBtn {
+  padding:.2rem .6rem;
   border:1px solid #ccc;
   background:#fff;
-  border-radius:999px;
+  border-radius:8px;
   cursor:pointer;
   font-size:14px;
   transition:all .2s ease;
 }
 
-#topBtn:hover{
+#topBtn:hover, #toggleTabsBtn:hover, #prevBtn:hover, #nextBtn:hover, #clearSearchBtn:hover {
   background:#f3f3f3;
   border-color:#999;
 }
@@ -168,7 +172,7 @@ mark.active{
   <button id="clearSearchBtn">✕</button>
   <button id="prevBtn">◀</button>
   <button id="nextBtn">▶</button>
-  <button id="toggleTabsBtn">Tab</button>
+  <button id="toggleTabsBtn">Section</button>
 </div>
 
 <!-- ================= MAIN ================= -->

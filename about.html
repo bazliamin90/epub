@@ -1,270 +1,481 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <script src="header.js"></script>
-  <title>About</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<script src="header.js"></script>
+<title>About</title>
 
-  <!-- PDF.js base CSS -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf_viewer.min.css" />
-  <link rel="stylesheet" href="t.css" />
-</head>
-<body>
-  <!-- Controls -->
-  <div id="controls">
-    <header3-component></header3-component>
+<style>
 
-    <label style="display:none">
-      <input type="number" id="pageInput" value="1" min="1" style="width:4rem">
-    </label>
-    <span id="pageCount" style="display:none">/--</span>
-
-    <label style="margin-left:1rem">
-      <select id="zoomSelect">
-        <option value="0.5">50%</option>
-        <option value="1">100%</option>
-        <option value="1.5">150%</option>
-        <option value="2">200%</option>
-        <option value="3">300%</option>
-        <option value="page-width">Fit W</option>
-        <option value="page-height">Fit H</option>
-      </select>
-    </label>
-  </div>
-
-  <button id="prevPage">◀</button>
-  <button id="nextPage">▶</button>
-
-  <!-- PDF container -->
-  <div id="viewerContainer">
-    <div id="viewer" class="pdfViewer"></div>
-  </div>
-
-  <div id="sliderContainer" style="display:none">
-      <div>
-        <input type="range" id="pageSlider" min="2" max="1" value="2">
-      </div>
-      <div>
-        <label id="searchlabel" style="margin-left:1rem">
-          <input type="text" id="searchInput" placeholder="Search…" style="width:8rem">
-          <button id="findPrev">◀</button>
-          <button id="findNext">▶</button>
-          <button id="findReset">✖</button>
-        </label>
-      </div>
-  </div>
-
-  <!-- PDF.js scripts -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf_viewer.min.js"></script>
-  <script>
-    
-    // Disable browser restoring scroll
-    if ("scrollRestoration" in history) {
-      history.scrollRestoration = "manual";
-    }
-
-    // Always scroll to top at reload
-    window.addEventListener("load", () => {
-      window.scrollTo(0, 0);
-    });
-
-    pdfjsLib.GlobalWorkerOptions.workerSrc =
-      "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
-
-    const container = document.getElementById("viewerContainer");
-    const eventBus = new pdfjsViewer.EventBus();
-    const linkService = new pdfjsViewer.PDFLinkService({ eventBus });
-    const findController = new pdfjsViewer.PDFFindController({ eventBus, linkService });
-
-    // Continuous up-to-down Page Viewer
-    const viewer = new pdfjsViewer.PDFViewer({
-      container,
-      eventBus,
-      linkService,
-      findController,
-      textLayerMode: 2,
-    });
-    linkService.setViewer(viewer);
-
-    let pdfDoc = null;
-
-    // --- Namespaced keys per HTML file ---
-    const pageKey = location.pathname.split("/").pop().replace(/\.[^/.]+$/, "");
-    const lastPageKey = pageKey + "_lastPage";
-    const lastZoomKey = pageKey + "_lastZoom";
-
-    const pageSlider = document.getElementById("pageSlider");
-
-    // When PDF is fully initialized
-    eventBus.on("pagesinit", () => {
-      // Reset body scroll to top
-      window.scrollTo(0, 0);
-
-      // Restore last zoom
-      let savedZoom = localStorage.getItem(lastZoomKey);
-      if (savedZoom) {
-        viewer.currentScaleValue = savedZoom;
-        document.getElementById("zoomSelect").value = savedZoom;
-      } else {
-        viewer.currentScaleValue = window.innerWidth < 768 ? "page-width" : "auto";
-      }
-
-      document.getElementById("pageCount").textContent = "/" + pdfDoc.numPages;
-      document.getElementById("pageInput").max = pdfDoc.numPages;
-      pageSlider.max = pdfDoc.numPages;
-
-      // Restore last page
-      let savedPage = parseInt(localStorage.getItem(lastPageKey), 10);
-      if (savedPage && savedPage > 0 && savedPage <= pdfDoc.numPages) {
-        viewer.currentPageNumber = savedPage;
-      }
-
-      // Sync input and slider with current page
-      document.getElementById("pageInput").value = viewer.currentPageNumber;
-      pageSlider.value = viewer.currentPageNumber;
-    });
-
-    // When page changes
-    eventBus.on("pagechanging", (e) => {
-      document.getElementById("pageInput").value = e.pageNumber;
-      pageSlider.value = e.pageNumber;
-      localStorage.setItem(lastPageKey, e.pageNumber);
-    });
-
-    async function openPDF(url) {
-      const loadingTask = pdfjsLib.getDocument(url);
-      pdfDoc = await loadingTask.promise;
-      viewer.setDocument(pdfDoc);
-      linkService.setDocument(pdfDoc, null);
-    }
-
-    // ===== GOOGLE Doc to PDF LOADER =====
-
-// Google Docs file ID
-const docId = "14rf39li35oFBQZzX31sQ-KAN3KdmjwbRYTVJfYyVmGg";
-
-// Export Google Doc as PDF
-const pdfUrl =
-  `https://docs.google.com/document/d/${docId}/export?format=pdf`;
-
-// Load into PDF.js
-openPDF(pdfUrl);
-
-    // Page input jump
-    document.getElementById("pageInput").addEventListener("change", (e) => {
-      let page = parseInt(e.target.value, 10);
-      if (page > 0 && page <= pdfDoc.numPages) {
-        viewer.currentPageNumber = page;
-      } else {
-        e.target.value = viewer.currentPageNumber;
-      }
-    });
-
-    // Prev button
-    document.getElementById("prevPage").addEventListener("click", () => {
-      if (viewer.currentPageNumber > 1) {
-        viewer.currentPageNumber -= 1;
-      }
-    });
-
-    // Next button
-    document.getElementById("nextPage").addEventListener("click", () => {
-      if (viewer.currentPageNumber < pdfDoc.numPages) {
-        viewer.currentPageNumber += 1;
-      }
-    });
-
-    // Slider navigation
-    pageSlider.addEventListener("input", (e) => {
-      let page = parseInt(e.target.value, 10);
-      if (page > 0 && page <= pdfDoc.numPages) {
-        viewer.currentPageNumber = page;
-      }
-    });
-
-    // Zoom control
-    document.getElementById("zoomSelect").addEventListener("change", (e) => {
-      viewer.currentScaleValue = e.target.value;
-      localStorage.setItem(lastZoomKey, e.target.value);
-    });
-
-    // Keyboard shortcuts
-    document.addEventListener("keydown", (e) => {
-      if (!pdfDoc) return;
-
-      switch (e.key) {
-        case "ArrowLeft": // Prev page
-          if (viewer.currentPageNumber > 1) {
-            viewer.currentPageNumber -= 1;
-          }
-          break;
-        case "ArrowRight": // Next page
-          if (viewer.currentPageNumber < pdfDoc.numPages) {
-            viewer.currentPageNumber += 1;
-          }
-          break;
-        case "+":
-        case "=": { // Zoom in
-          let newScale = viewer.currentScale + 0.25;
-          if (newScale <= 3) {
-            viewer.currentScale = newScale;
-            localStorage.setItem(lastZoomKey, viewer.currentScale);
-          }
-          break;
-        }
-        case "-": { // Zoom out
-          let newScale = viewer.currentScale - 0.25;
-          if (newScale >= 0.5) {
-            viewer.currentScale = newScale;
-            localStorage.setItem(lastZoomKey, viewer.currentScale);
-          }
-          break;
-        }
-      }
-    });
-    // --- Search functions ---
-const searchInput = document.getElementById("searchInput");
-const findPrevBtn = document.getElementById("findPrev");
-const findNextBtn = document.getElementById("findNext");
-
-function doSearch(forward = true) {
-  const query = searchInput.value.trim();
-  if (!query) return;
-
-  eventBus.dispatch("find", {
-    source: this,
-    type: "again",
-    query,
-    caseSensitive: false,
-    highlightAll: true,
-    findPrevious: !forward,
-  });
+body{
+  margin:0;
+  font-family:Arial;
+  height:100dvh;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+  background-color: tan;
 }
 
-findNextBtn.addEventListener("click", () => doSearch(true));
-findPrevBtn.addEventListener("click", () => doSearch(false));
+/* ================= NAVBAR ================= */
 
-searchInput.addEventListener("keydown", (e) => {
-  if (e.key === "Enter") {
-    doSearch(true);
-  }
-});
-const resetBtn = document.getElementById("findReset");
+#navbar{
+  display:flex;
+  gap:.5rem;
+  align-items:center;
+  padding:.3rem 1rem;
+  background:white;
+  box-shadow:0 0 15px rgba(0,0,0,.1);
+  border-bottom:1px solid black;
 
-resetBtn.addEventListener("click", () => {
-  searchInput.value = "";
-  eventBus.dispatch("find", {
-    source: this,
-    type: "again",
-    query: "",
-    caseSensitive: false,
-    highlightAll: false,
-    findPrevious: false,
+  position:sticky;
+  top:0;
+  z-index:2000;
+
+  flex-shrink:0;
+}
+
+#footbar{
+  padding:.3rem 1rem;
+  background:white;
+  border-top:1px solid black;
+  box-shadow:0 0 15px rgba(0,0,0,.08);
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  gap:.5rem;
+
+  position:sticky;
+  bottom:0;
+  z-index:1000;
+}
+
+#searchInput{
+  width: 100px;
+  padding:.2rem .6rem;
+  border:1px solid #ccc;
+  border-radius:8px;
+  font-size:14px;
+}
+
+/* ================= LAYOUT ================= */
+
+#container{
+  flex:1;
+  display:flex;
+  overflow:hidden;
+  position:relative;
+
+  min-height:0;
+}
+
+/* SIDEBAR (OUTLINE) */
+
+#tabs{
+  width:8rem;
+  background:#f7f7f7;
+  border-right:1px solid #ddd;
+  overflow:auto;
+  padding:.5rem;
+
+  position:absolute;
+  top:0;
+  left:0;
+
+  transform:translateY(-100%);
+  transition:transform .35s ease;
+
+  z-index:900;
+}
+
+/* visible state */
+#tabs.show{
+  transform:translateY(0);
+}
+
+.tab{
+  padding:.5rem;
+  margin-bottom:.3rem;
+  background:white;
+  border-radius:6px;
+  cursor:pointer;
+  font-size:14px;
+}
+
+.tab:hover{
+  background:#eef2ff;
+}
+
+/* DOCUMENT */
+
+#docWrapper{
+  flex:1;
+  overflow:auto;
+
+  margin-top: 0.3rem;
+  margin-bottom: 0.3rem; ;
+  padding:2rem;
+
+  background:white;
+  border:1px solid #ccc;
+  box-sizing:border-box;
+
+  line-height:1.6;
+  min-height:0;
+
+  scroll-behavior:smooth;
+}
+
+/* HIGHLIGHT */
+
+mark{
+  background:rgba(0, 255, 0, 0.475);
+  padding:0;
+}
+
+/* active match */
+mark.active{
+  background:orange;
+}
+
+#topBtn, #toggleTabsBtn, #prevBtn, #nextBtn, #clearSearchBtn {
+  padding:.2rem .6rem;
+  border:1px solid #ccc;
+  background:#fff;
+  border-radius:8px;
+  cursor:pointer;
+  font-size:14px;
+  transition:all .2s ease;
+}
+
+#topBtn:hover, #toggleTabsBtn:hover, #prevBtn:hover, #nextBtn:hover, #clearSearchBtn:hover {
+  background:#f3f3f3;
+  border-color:#999;
+}
+
+#topBtn:active{
+  transform:scale(0.97);
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- ================= NAVBAR ================= -->
+<div id="navbar">
+  <header3-component></header3-component>
+</div>
+
+<!-- ================= MAIN ================= -->
+<div id="container">
+  <div id="tabs"></div>
+  <div id="docWrapper">
+    <div id="doc"></div>
+  </div>
+</div>
+
+<div id="footbar">
+  <button id="topBtn">↑ Top</button>
+</div>
+
+<script>
+
+// =====================================================
+// 1. GOOGLE DOC SOURCE (YOUR LINK → EXPORT MODE)
+// =====================================================
+
+const docId =
+  "14rf39li35oFBQZzX31sQ-KAN3KdmjwbRYTVJfYyVmGg";
+
+// IMPORTANT: we still use your tab link only as reference,
+// but real rendering uses export HTML (required)
+const sourceUrl =
+  `https://docs.google.com/document/d/${docId}/export?format=html`;
+
+// =====================================================
+// 2. STATE ENGINE
+// =====================================================
+
+let docRoot;
+let matches = [];
+let currentIndex = -1;
+
+// =====================================================
+// 3. LOAD DOC
+// =====================================================
+
+fetch(sourceUrl)
+  .then(r => r.text())
+  .then(html => {
+
+    const container =
+      document.getElementById("doc");
+
+    container.innerHTML = html;
+
+    docRoot = container;
+
+    buildOutline();
+
   });
+
+// =====================================================
+// 4. BUILD SIDEBAR OUTLINE (TABS REPLACEMENT)
+// =====================================================
+
+function buildOutline(){
+
+  const tabs =
+    document.getElementById("tabs");
+
+  const headings =
+    docRoot.querySelectorAll("h1, h2, h3");
+
+  headings.forEach((h, i) => {
+
+    const div =
+      document.createElement("div");
+
+    div.className = "tab";
+
+    div.textContent =
+      h.textContent || `Section ${i+1}`;
+
+    div.onclick = () => {
+
+      const wrapper =
+  document.getElementById("docWrapper");
+
+wrapper.scrollTo({
+  top:
+    h.offsetTop - 20,
+  behavior:"smooth"
 });
 
-  </script>
+    };
+
+    tabs.appendChild(div);
+
+  });
+
+}
+
+// =====================================================
+// 5. SAFE TEXT NODE WALK SEARCH (NO HTML DESTRUCTION)
+// =====================================================
+
+function getTextNodes(root){
+
+  const walker =
+    document.createTreeWalker(
+      root,
+      NodeFilter.SHOW_TEXT,
+      null
+    );
+
+  const nodes = [];
+  let n;
+
+  while(n = walker.nextNode()){
+    if(n.nodeValue.trim()){
+      nodes.push(n);
+    }
+  }
+
+  return nodes;
+
+}
+
+// =====================================================
+// 6. CLEAR HIGHLIGHTS
+// =====================================================
+
+function clearHighlights(){
+
+  const marks =
+    docRoot.querySelectorAll("mark");
+
+  marks.forEach(m => {
+
+    const parent =
+      m.parentNode;
+
+    parent.replaceChild(
+      document.createTextNode(m.textContent),
+      m
+    );
+
+    parent.normalize();
+
+  });
+
+  matches = [];
+  currentIndex = -1;
+
+}
+
+// =====================================================
+// 7. SEARCH ENGINE (PRO VERSION)
+// =====================================================
+
+function search(){
+
+  clearHighlights();
+
+  const query =
+    document.getElementById("searchInput").value;
+
+  if(!query) return;
+
+  const regex =
+    new RegExp(query, "gi");
+
+  const nodes =
+    getTextNodes(docRoot);
+
+  nodes.forEach(node => {
+
+    const text =
+      node.nodeValue;
+
+    if(!regex.test(text)) return;
+
+    const span =
+      document.createElement("span");
+
+    span.innerHTML =
+      text.replace(regex, m =>
+        `<mark>${m}</mark>`
+      );
+
+    node.replaceWith(span);
+
+  });
+
+  matches =
+    Array.from(docRoot.querySelectorAll("mark"));
+
+  currentIndex = -1;
+
+}
+
+// =====================================================
+// 8. NAVIGATION
+// =====================================================
+
+function goTo(index){
+
+  if(matches.length === 0) return;
+
+  const el =
+    matches[index];
+
+  if(!el) return;
+
+  matches.forEach(m => m.classList.remove("active"));
+
+  el.classList.add("active");
+
+  el.scrollIntoView({
+    behavior:"smooth",
+    block:"center"
+  });
+
+}
+
+// next
+function next(){
+
+  if(matches.length === 0) search();
+
+  if(matches.length === 0) return;
+
+  currentIndex =
+    (currentIndex + 1) % matches.length;
+
+  goTo(currentIndex);
+
+}
+
+// prev
+function prev(){
+
+  if(matches.length === 0) search();
+
+  if(matches.length === 0) return;
+
+  currentIndex =
+    (currentIndex - 1 + matches.length)
+    % matches.length;
+
+  goTo(currentIndex);
+
+}
+
+// =====================================================
+// 9. EVENTS
+// =====================================================
+
+document
+  .getElementById("searchInput")
+  .addEventListener("keydown", e => {
+
+    if(e.key === "Enter"){
+      search();
+      next();
+    }
+
+  });
+
+document.getElementById("nextBtn").onclick = next;
+document.getElementById("prevBtn").onclick = prev;
+
+// =====================================================
+// 10. TOGGLE TABS
+// =====================================================
+
+const toggleTabsBtn =
+  document.getElementById("toggleTabsBtn");
+
+const tabs =
+  document.getElementById("tabs");
+
+toggleTabsBtn.onclick = () => {
+
+  tabs.classList.toggle("show");
+
+};
+
+// =====================================================
+// 11. CLEAR SEARCH
+// =====================================================
+
+document
+  .getElementById("clearSearchBtn")
+  .onclick = () => {
+
+    document
+      .getElementById("searchInput")
+      .value = "";
+
+    clearHighlights();
+
+  };
+
+// =====================================================
+// 12. SCROLL TO TOP
+// =====================================================
+document.getElementById("topBtn").onclick = () => {
+  document.getElementById("docWrapper").scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+};
+</script>
+
 </body>
 </html>

@@ -288,7 +288,6 @@ h1 a:hover {
     <li>Bazli's tadabbur notes
         <ol>
             <li><a href="039.html">92. Al-layl</a></li>
-            <li><a href="035.html">111. Al-masad</a></li>
         </ol>
     </li>
 
