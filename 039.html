@@ -55,10 +55,10 @@ body{
 
 #searchInput{
   width: 100px;
-  padding:.2rem .6rem;
+  padding:.2rem .4rem;
   border:1px solid #ccc;
   border-radius:8px;
-  font-size:14px;
+  font-size:13px;
 }
 
 /* ================= LAYOUT ================= */
@@ -141,17 +141,17 @@ mark.active{
   background:orange;
 }
 
-#topBtn, #toggleTabsBtn, #prevBtn, #nextBtn, #clearSearchBtn {
-  padding:.2rem .6rem;
+#topBtn, #toggleTabsBtn, #prevBtn, #nextBtn, #clearSearchBtn ,#prevSectionBtn, #nextSectionBtn {
+  padding:.2rem .4rem;
   border:1px solid #ccc;
   background:#fff;
   border-radius:8px;
   cursor:pointer;
-  font-size:14px;
+  font-size:13px;
   transition:all .2s ease;
 }
 
-#topBtn:active, #toggleTabsBtn:active, #prevBtn:active, #nextBtn:active, #clearSearchBtn:active {
+#topBtn:active, #toggleTabsBtn:active, #prevBtn:active, #nextBtn:active, #clearSearchBtn:active, #prevSectionBtn:active, #nextSectionBtn:active {
   background:tan;
   border-color:#999;
 }
@@ -180,7 +180,9 @@ mark.active{
 </div>
 
 <div id="footbar">
+  <button id="prevSectionBtn">◀ Section</button>
   <button id="topBtn">↑ Top</button>
+  <button id="nextSectionBtn">Section ▶</button>
 </div>
 
 <script>
@@ -204,6 +206,8 @@ const sourceUrl =
 let docRoot;
 let matches = [];
 let currentIndex = -1;
+
+let headings = [];
 
 // =====================================================
 // 3. LOAD DOC
@@ -233,8 +237,10 @@ function buildOutline(){
   const tabs =
     document.getElementById("tabs");
 
-  const headings =
-    docRoot.querySelectorAll("h1, h2, h3");
+  headings =
+  Array.from(
+    docRoot.querySelectorAll("h1, h2, h3")
+  );
 
   headings.forEach((h, i) => {
 
@@ -475,6 +481,79 @@ document.getElementById("topBtn").onclick = () => {
     top: 0,
     behavior: "smooth"
   });
+};
+
+function getCurrentSectionIndex(){
+
+  const wrapper =
+    document.getElementById("docWrapper");
+
+  const scrollPos =
+    wrapper.scrollTop;
+
+  let current = 0;
+
+  headings.forEach((h, i) => {
+
+    if(h.offsetTop - 30 <= scrollPos){
+      current = i;
+    }
+
+  });
+
+  return current;
+
+}
+
+document
+  .getElementById("prevSectionBtn")
+  .onclick = function(){
+
+    if(!headings.length) return;
+
+    let index =
+      getCurrentSectionIndex();
+
+    index =
+      Math.max(0, index - 1);
+
+    document
+      .getElementById("docWrapper")
+      .scrollTo({
+        top:
+          headings[index].offsetTop - 20,
+        behavior:"smooth"
+      });
+
+    this.blur();
+
+};
+
+document
+  .getElementById("nextSectionBtn")
+  .onclick = function(){
+
+    if(!headings.length) return;
+
+    let index =
+      getCurrentSectionIndex();
+
+    index =
+      Math.min(
+        headings.length - 1,
+        index + 1
+      );
+
+    document
+      .getElementById("docWrapper")
+      .scrollTo({
+        top:
+          headings[index].offsetTop - 20,
+        behavior:"smooth"
+      });
+
+    this.blur();
+
 };
 </script>
 
