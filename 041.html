@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<script src="header.js"></script>
+<link rel="stylesheet" href="gdoc.css">
+<title>42. Asy-syura</title>
+</head>
+
+<body>
+
+<!-- ================= NAVBAR ================= -->
+<div id="navbar">
+  <header3-component></header3-component>
+  <input id="searchInput" placeholder="Cari..." />
+  <button id="clearSearchBtn">✕</button>
+  <button id="prevBtn">◀</button>
+  <button id="nextBtn">▶</button>
+  <button id="toggleTabsBtn">Section</button>
+</div>
+
+<div id="progressBar">
+  <div id="progressFill"></div>
+</div>
+
+<!-- ================= MAIN ================= -->
+<div id="container">
+  <div id="tabs"></div>
+  <div id="docWrapper">
+    <div id="loading">
+      <div class="spinner"></div>
+      <div>Tunggu kejap...</div>
+    </div>
+    <div id="doc"></div>
+  </div>
+</div>
+
+<div id="footbar">
+  <button id="prevSectionBtn">◀ Section</button>
+  <button id="topBtn">↑ Top</button>
+  <button id="nextSectionBtn">Section ▶</button>
+</div>
+
+<script>
+
+// =====================================================
+// 1. GOOGLE DOC SOURCE (YOUR LINK → EXPORT MODE)
+// =====================================================
+
+const docId =
+  "1b8iIb_YvAz7pX55Wlu2XghgWaFosnLWLFsc4RoKQbmc";
+
+// IMPORTANT: we still use your tab link only as reference,
+// but real rendering uses export HTML (required)
+const sourceUrl =
+  `https://docs.google.com/document/d/${docId}/export?format=html`;
+</script>
+<script src="gdoc.js"></script>
+</body>
+</html>
